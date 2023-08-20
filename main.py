@@ -5,8 +5,7 @@ from create_tree import create_tree
  
 def main(string_input):
    
-    elements = transform_input(string_input) 
-    print(elements)   
+    elements = transform_input(string_input)   
     tree , root_idx = create_tree(elements)
 
     # Calcula valor da raíz    
