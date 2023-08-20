@@ -10,7 +10,7 @@ from main import simple_calculator
 class TestClass:
     def 'should return a correct sum value'(self):
 
-        text = '1+2'
+        text = ' 1+2'
         assert simple_calculator(text) == 3
 
     def 'should return a correct subtract value'(self):
