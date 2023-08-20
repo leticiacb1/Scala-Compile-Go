@@ -18,7 +18,7 @@ def simple_calculator(string_input):
             num = ''
 
             # Loop interno buscando numeros "compostos"
-            while(string_input[i].isdigit()):
+            while(i < len(string_input) and string_input[i].isdigit()):
                 num+= string_input[i]
                 i+=1
             elements.append(num)
@@ -30,9 +30,15 @@ def simple_calculator(string_input):
             if(char in ['+','-']):
                 # Adiciona operadores
                 elements.append(char)
+
             idx+=1
     
     print(f" Lista de elementos : {elements}")
+    print(eval(''.join(elements)))
+
+    # Criando nós da árvore:
+
+
 
     return 0
     
