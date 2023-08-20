@@ -16,4 +16,4 @@ if __name__ == '__main__':
     std_input = (sys.argv)[1:]
     result = main(std_input[0])
 
-    print(f"\n\t Result : {result}\n")
+    print(result)
