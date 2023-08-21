@@ -1,6 +1,6 @@
 
 object Hello {
     def main(args: Array[String]) = {
-        println("Hello, world")
+        printf("Hello world , %s\n", args(0))
     }
 }
