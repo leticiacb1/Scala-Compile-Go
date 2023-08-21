@@ -16,10 +16,15 @@ scala -version
 ### Run code Hello.scala 📌️
 ```bash
 # Compile
-scalac Hello.scala
+scalac Hello.scala 
 
-# Run code
-scala Hello
+# Run code passing arguments
+scala Hello Raul
+```
+
+Expected return:
+```bash
+Hello world , Raul
 ```
 
 To know more : [Scala Official Documentation](https://docs.scala-lang.org/overviews/scala-book/hello-world-1.html)
