@@ -1,5 +1,7 @@
 import util.control.Breaks._
 
+class MyCustomException(s: String) extends Exception(s) {}  
+
 class Token (var _type : String , var _value : Int){
 
   override def toString  : String = {
@@ -106,19 +108,32 @@ class Tokenizer ( _source : String){
 
 class Parser() {
   
-  def parseExpression() : Unit = {
+  def parseExpression(tokenizer : Tokenizer) : Int = {
     println("Parser Expresion")
+
+    var result : Int =  0
+
+    if(tokenizer.next._type == "INT"){
+      result = tokenizer.next._value
+      tokenizer.selectNext()
+      println(" Inteiro ")
+    }else{
+      throw new MyCustomException("Tem que começar com numero") 
+    }
+
+    result
   }
 
-  def run(source_code : String) : Unit = {
+  def run(source_code : String) : Int = {
     
     var tokenizer  = new Tokenizer(source_code)
     tokenizer.selectNext()
 
     println(tokenizer.next)
 
-    var result = parseExpression()
+    var result = parseExpression(tokenizer)
     println("Chamou o result")
+    result
   }
 
 }
@@ -135,5 +150,5 @@ object Main extends App {
   println("Token : " + tokenizer.next)
   
   var parser = new Parser()
-  parser.run("1 + 2")
+  parser.run(" 1 + 2")
 }
