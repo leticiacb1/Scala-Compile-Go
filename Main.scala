@@ -2,7 +2,21 @@ import util.control.Breaks._
 
 class Token (var _type : String , var _value : Int){
 
-  override def toString = "(" + _type + " , " + _value + ")"
+  override def toString  : String = {
+  
+    if(_type == "INT"){
+      "( " + _value + " , " + _type + ")"
+    } else if (_type == "+"){
+      "( " + _type + " , " + "PLUS " + ")"
+    } else if (_type == "-") {
+      "( " + _type + " , " + "MINUS " + ")"
+    } else if (_type == "EOF"){
+      "( " + _type + " , " + "EOF " + ")"
+    } else {
+      "( " + _type + " , " + "INVALID " + ")"
+    }
+
+  }
 }
 
 class Tokenizer ( _source : String){
@@ -115,10 +129,13 @@ object Main extends App {
   tokenizer.selectNext()
   println("Token : " + tokenizer.next)
   tokenizer.selectNext()
-  println(tokenizer.next)
+  println("Token : " + tokenizer.next)
   tokenizer.selectNext()
-  println(tokenizer.next)
-
+  println("Token : " + tokenizer.next)
+  tokenizer.selectNext()
+  println("Token : " + tokenizer.next)
+  tokenizer.selectNext()
+  println("Token : " + tokenizer.next)
   // var parser = new Parser(tokenizer)
   // parser.parseExpression()
   // parser.run("Teste")
