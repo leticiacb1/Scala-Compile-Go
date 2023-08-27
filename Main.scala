@@ -176,15 +176,17 @@ class Parser() {
 
 }
 
-object Main extends App {
+object Main {
 
-  if (args.length == 1){
-        var parser = new Parser()
-        var result = parser.run(args(0))
+  def main(args: Array[String]) {
 
-        println("Resultado: " + result)
-  }else{
-        println("I didn't get info.")
+    if (args.length == 1){
+          var parser = new Parser()
+          var result = parser.run(args(0))
+
+          println(result)
+    }else{
+          println("I didn't get info.")
+    }
   }
-
 }
