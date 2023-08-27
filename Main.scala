@@ -104,16 +104,21 @@ class Tokenizer ( _source : String){
 
 }
 
-class Parser(var _tokenizer : Tokenizer) {
+class Parser() {
   
-  var tokenizer = _tokenizer
-
   def parseExpression() : Unit = {
-    println("Algo aqui")
+    println("Parser Expresion")
   }
 
-  def run(_code : String) : Unit = {
-    println("Algo aqui")
+  def run(source_code : String) : Unit = {
+    
+    var tokenizer  = new Tokenizer(source_code)
+    tokenizer.selectNext()
+
+    println(tokenizer.next)
+
+    var result = parseExpression()
+    println("Chamou o result")
   }
 
 }
@@ -128,16 +133,7 @@ object Main extends App {
   var tokenizer = new Tokenizer("1+2")
   tokenizer.selectNext()
   println("Token : " + tokenizer.next)
-  tokenizer.selectNext()
-  println("Token : " + tokenizer.next)
-  tokenizer.selectNext()
-  println("Token : " + tokenizer.next)
-  tokenizer.selectNext()
-  println("Token : " + tokenizer.next)
-  tokenizer.selectNext()
-  println("Token : " + tokenizer.next)
-  // var parser = new Parser(tokenizer)
-  // parser.parseExpression()
-  // parser.run("Teste")
-
+  
+  var parser = new Parser()
+  parser.run("1 + 2")
 }
