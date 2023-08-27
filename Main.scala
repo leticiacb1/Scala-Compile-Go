@@ -1,15 +1,15 @@
-import scala.util.control.Breaks._
+import util.control.Breaks._
 
 class Token (var _type : String , var _value : Int){
 
   override def toString = "(" + _type + " , " + _value + ")"
 }
 
-class Tokenizer ( _source : String ,  _position : Int ,  _next : Token ){
+class Tokenizer ( _source : String){
 
+  var source : String = _source
   var position : Int = 0
-  var source : String = "1 + 2"
-  var next : Token = _next
+  var next : Token = new Token("INIT", 0)
 
   def selectNext() : Unit = {
 
@@ -22,27 +22,70 @@ class Tokenizer ( _source : String ,  _position : Int ,  _next : Token ){
     val PLUS  = 1
     val MINUS = 2
 
+    println(" Source é " + source)
+
+    breakable {
     while(true){
       
-      if(position >= source.length()){
-        println(" Maior que o tamanho da string")
+      
+        if(position >= source.length()){
+          println(" Maior que o tamanho da string")
 
-        if(next._type != "EOF"){
-          next = new Token(_type = "EOF" , _value = EOF)
-        }
-      } else {
+            if(next._type != "EOF"){
+              next = new Token(_type = "EOF" , _value = EOF)
+            }
 
-        if (source.charAt(_position).isDigit){
-          println(" Primeiro elemento é um dígito")
-        }
+            break;
 
-      }
+        } else {
+          
+          if (source.charAt(position).isDigit){
 
-      println("Aqui");
-      break;
-    } 
+            var value_str : String = ""
+            println("É digito , " + source.charAt(position))
 
-    println("Faço algo aqui");
+            breakable {
+              while(position < source.length){
+                
+                if (! source.charAt(position).isDigit){
+                  break;
+                }else{
+                  value_str += source.charAt(position)
+                  position += 1
+                }
+              }
+            }
+
+            next = new Token(_type = "INT", _value = value_str.toInt)
+            break;
+
+          } else if (source.charAt(position) == '+'){
+            println(" Mais ")
+            next = new Token(_type = "+", _value = PLUS)
+            position += 1
+            break;
+          
+          } else if (source.charAt(position) == '-'){
+            
+            next = new Token(_type = "-", _value = MINUS)
+            position +=1
+            break;
+          
+          } else if (source.charAt(position).isWhitespace){
+            position += 1
+          
+          } else {
+            next = new Token(_type = "INVALID", _value = INVALID)
+            position += 1
+            break;
+          }
+
+        } 
+
+      println("Faço algo aqui");
+
+    }
+    }
   }
 
 }
@@ -68,17 +111,16 @@ object Main extends App {
   else
         println("I didn't get your name.")
 
-  var token = new Token("Teste" , 1)
-  var other_token = new Token("Teste2" , 2)
-  
-  println(other_token)
-  println(token)
-
-  var tokenizer = new Tokenizer("Teste" , 0 , token)
+  var tokenizer = new Tokenizer("1+2")
   tokenizer.selectNext()
+  println("Token : " + tokenizer.next)
+  tokenizer.selectNext()
+  println(tokenizer.next)
+  tokenizer.selectNext()
+  println(tokenizer.next)
 
-  var parser = new Parser(tokenizer)
-  parser.parseExpression()
-  parser.run("Teste")
+  // var parser = new Parser(tokenizer)
+  // parser.parseExpression()
+  // parser.run("Teste")
 
 }
