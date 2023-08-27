@@ -178,7 +178,7 @@ class Parser() {
 
 object Main {
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]) = {
 
     if (args.length == 1){
           var parser = new Parser()
