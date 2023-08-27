@@ -1,11 +1,50 @@
+import scala.util.control.Breaks._
 
-class Token (var _type : String , var _value : Int)
+class Token (var _type : String , var _value : Int){
 
-class Tokenizer (var _source : String , var _position : Int , var _next : Token ){
+  override def toString = "(" + _type + " , " + _value + ")"
+}
+
+class Tokenizer ( _source : String ,  _position : Int ,  _next : Token ){
+
+  var position : Int = 0
+  var source : String = "1 + 2"
+  var next : Token = _next
 
   def selectNext() : Unit = {
-    println("Faço algo aqui")
-  } 
+
+    var find_token : Boolean = false;
+    var find_invalid : Boolean = false;
+
+    // Definição de valores:
+    val EOF = 0
+    val INVALID = -1 
+    val PLUS  = 1
+    val MINUS = 2
+
+    while(true){
+      
+      if(position >= source.length()){
+        println(" Maior que o tamanho da string")
+
+        if(next._type != "EOF"){
+          next = new Token(_type = "EOF" , _value = EOF)
+        }
+      } else {
+
+        if (source.charAt(_position).isDigit){
+          println(" Primeiro elemento é um dígito")
+        }
+
+      }
+
+      println("Aqui");
+      break;
+    } 
+
+    println("Faço algo aqui");
+  }
+
 }
 
 class Parser(var _tokenizer : Tokenizer) {
@@ -30,7 +69,10 @@ object Main extends App {
         println("I didn't get your name.")
 
   var token = new Token("Teste" , 1)
-  println(token._type)
+  var other_token = new Token("Teste2" , 2)
+  
+  println(other_token)
+  println(token)
 
   var tokenizer = new Tokenizer("Teste" , 0 , token)
   tokenizer.selectNext()
