@@ -59,6 +59,18 @@ class Tokenizer ( _source : String){
                         break;
                     }
 
+                    case Types.TIMES => {
+                        next = new Token(_type = Types.TIMES.toString , _value = Values.TIMES)
+                        position += 1
+                        break;
+                    }
+
+                    case Types.BAR => {
+                        next = new Token(_type = Types.BAR.toString , _value = Values.BAR)
+                        position +=1
+                        break;
+                    }
+
                     case x if x.isWhitespace => {
                         position += 1
                     }

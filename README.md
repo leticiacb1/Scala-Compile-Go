@@ -26,7 +26,7 @@ To know more : [Scala Official Documentation](https://docs.scala-lang.org/overvi
 
 ### Diagram ⚠️
 
-<img src = 'DiagramaSintatico.png'>
+<img src = 'Diagrama.png'>
 
 ### Test Status 👩‍💻️
 ![git status](http://3.129.230.99/svg/leticiacb1/Compiler/)

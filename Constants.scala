@@ -5,6 +5,8 @@ object Types {
     val EOF     = "EOF" 
     val PLUS    = '+'
     val MINUS   = '-'
+    val TIMES   = '*'
+    val BAR     = '/'
     val INT     = "INT"
 }
 
@@ -13,4 +15,6 @@ object Values {
     val EOF = 0
     val PLUS  = 1
     val MINUS = 2
+    val TIMES = 3
+    val BAR   = 4
 }
