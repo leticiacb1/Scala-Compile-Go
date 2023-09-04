@@ -71,6 +71,18 @@ class Tokenizer ( _source : String){
                         break;
                     }
 
+                    case Types.OPEN_PARENTHESES => {
+                        next = new Token(_type = Types.OPEN_PARENTHESES.toString , _value = Values.PARENTHESES)
+                        position +=1
+                        break;
+                    }
+
+                    case Types.CLOSE_PARENTHESES => {
+                        next = new Token(_type = Types.CLOSE_PARENTHESES.toString , _value = Values.PARENTHESES)
+                        position +=1
+                        break;
+                    }
+
                     case x if x.isWhitespace => {
                         position += 1
                     }
