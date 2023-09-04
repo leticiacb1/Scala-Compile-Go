@@ -3,11 +3,13 @@ package constants
 object Types { 
     val INVALID = "INVALID" 
     val EOF     = "EOF" 
+    val INT     = "INT"
     val PLUS    = '+'
     val MINUS   = '-'
     val TIMES   = '*'
     val BAR     = '/'
-    val INT     = "INT"
+    val OPEN_PARENTHESES = '('
+    val CLOSE_PARENTHESES = ')'
 }
 
 object Values {
@@ -17,4 +19,5 @@ object Values {
     val MINUS = 2
     val TIMES = 3
     val BAR   = 4
+    val PARENTHESES = 5
 }
