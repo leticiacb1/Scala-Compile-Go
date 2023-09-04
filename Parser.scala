@@ -6,6 +6,49 @@ import util.control.Breaks._
 import constants._
 
 class Parser() {
+
+  def parserFactory() : Int = {
+
+    if(tokenizer.next._type == "INT"){
+      
+    }
+    tokenizer.next._type match {
+
+      case "INT" => {
+        var num_value = Parser().tokenizer.next._value
+        tokenizer.selectNext()
+        num_value
+      }
+
+      case Types.PLUS => {
+        tokenizer.selectNext()
+        result = parserFactory()
+        (1)*result
+      } 
+
+      case Types.MINUS => {
+        tokenizer.selectNext()
+        result = parserFactory()
+        (-1)*result
+      } 
+
+      case Types.OPEN_PARENTHESES => {
+        tokenizer.selectNext()
+        result = parserExpression()
+
+        if(tokenizer.next._type == Types.CLOSE_PARENTHESESES){
+          tokenizer.selectNext()
+          result
+        }else{
+          throw new InvalidExpression("\n Expected close parentheses type | Got " + tokenizer.next)
+        }
+
+      }
+
+      case _ => {
+        throw new InvalidExpression("\n Unexpected value in factory | Got " + tokenizer.next)
+      }
+  }
   
   def parserTerm(tokenizer : Tokenizer) : Int = {
     var result : Int =  0
