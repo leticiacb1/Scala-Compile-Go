@@ -7,36 +7,33 @@ import constants._
 
 class Parser() {
 
-  def parserFactory() : Int = {
+  def parserFactory(tokenizer : Tokenizer) : Int = {
 
-    if(tokenizer.next._type == "INT"){
-      
-    }
-    tokenizer.next._type match {
-
-      case "INT" => {
-        var num_value = Parser().tokenizer.next._value
+      if (tokenizer.next._type ==  Types.INT) {
+        var num_value = tokenizer.next._value
         tokenizer.selectNext()
         num_value
       }
 
-      case Types.PLUS => {
+      else if (tokenizer.next._type ==  Types.PLUS.toString) {
         tokenizer.selectNext()
-        result = parserFactory()
+        var result = parserFactory(tokenizer)
         (1)*result
       } 
 
-      case Types.MINUS => {
+      else if (tokenizer.next._type ==  Types.MINUS.toString) {
         tokenizer.selectNext()
-        result = parserFactory()
+        var result = parserFactory(tokenizer)
         (-1)*result
       } 
 
-      case Types.OPEN_PARENTHESES => {
-        tokenizer.selectNext()
-        result = parserExpression()
 
-        if(tokenizer.next._type == Types.CLOSE_PARENTHESESES){
+
+      else if (tokenizer.next._type == Types.OPEN_PARENTHESES.toString) {
+        tokenizer.selectNext()
+        var result = parserExpression(tokenizer)
+
+        if(tokenizer.next._type == Types.CLOSE_PARENTHESES.toString){
           tokenizer.selectNext()
           result
         }else{
@@ -45,52 +42,35 @@ class Parser() {
 
       }
 
-      case _ => {
+      else {
         throw new InvalidExpression("\n Unexpected value in factory | Got " + tokenizer.next)
       }
-  }
+    }
   
   def parserTerm(tokenizer : Tokenizer) : Int = {
-    var result : Int =  0
+     
     var operators = List(Types.TIMES.toString , Types.BAR.toString )
+    var result : Int = parserFactory(tokenizer)
 
-    if(tokenizer.next._type != "INT"){
-      throw new InvalidExpression("\n Expected number type | Got " + tokenizer.next)
-    }
-
-    result = tokenizer.next._value
-    tokenizer.selectNext()
-    
     breakable {
       while(true){
-
+  
         if(! operators.contains(tokenizer.next._type)){
           break;
         }
 
         if(tokenizer.next._type == Types.TIMES.toString){
           tokenizer.selectNext()
-          
-          tokenizer.next._type match {
-              case "INT" => { result *= tokenizer.next._value }
-              case _     => { throw new InvalidExpression("\n Expected number type | Got " + tokenizer.next)}
-          }
+          result *= parserFactory(tokenizer)
         }
 
         if(tokenizer.next._type == Types.BAR.toString){
           tokenizer.selectNext()
-
-          tokenizer.next._type match {
-              case "INT" => { result /= tokenizer.next._value }
-              case _     => { throw new InvalidExpression("\n Expected number type | Got " + tokenizer.next) }
-          }
+          result /= parserFactory(tokenizer)
         }
-
-        tokenizer.selectNext()
-
       }
     }
-    
+
     result
   }
 
