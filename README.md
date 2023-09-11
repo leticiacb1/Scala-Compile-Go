@@ -28,5 +28,18 @@ To know more : [Scala Official Documentation](https://docs.scala-lang.org/overvi
 
 <img src = 'Diagrama.png'>
 
+### EBNF
+
+```bash
+
+EXPRESSION = TERM, { ("+" | "-"), TERM } ;
+TERM = FACTOR, { ("*" | "/"), FACTOR } ;
+FACTOR = ("+" | "-") FACTOR | "(" EXPRESSION ")" | number ; 
+
+NUMBER = DIGIT , {DIGIT} ; 
+DIGIT = 0 | 1 | ... | 9 ;
+
+```
+
 ### Test Status 👩‍💻️
 ![git status](http://3.129.230.99/svg/leticiacb1/Compiler/)
