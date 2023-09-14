@@ -27,10 +27,12 @@ package binop {
             _value match {
 
                 case Types.PLUS => {
+                    println(" ENTRO NO PLUSSS")
                     children(0).evaluate() + children(1).evaluate()  
                 }
 
                 case Types.MINUS => {
+                    println(" ENTRO NO MINUS")
                     children(0).evaluate() - children(1).evaluate()  
                 } 
 
@@ -66,12 +68,10 @@ package unop {
             _value match {
 
                 case Types.PLUS => {
-                    println(" ENTRO NO PLUSSS")
                     children(0).evaluate()
                 }
 
                 case Types.MINUS => {
-                    println(" ENTRO NO MINUS")
                     -children(0).evaluate()
                 }
                 case _  => {throw new Exception("Error de tipo")}

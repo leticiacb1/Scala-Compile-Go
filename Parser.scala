@@ -59,7 +59,7 @@ class Parser() {
       }
 
       else {
-        throw new InvalidExpression("\n Unexpected value in factory | Got " + tokenizer.next)
+        throw new InvalidExpression("\n Unexpected value in factor | Got " + tokenizer.next)
       }
     }
   
@@ -129,7 +129,7 @@ class Parser() {
           
           tokenizer.selectNext()
 
-          var right_node = parserFactor(tokenizer)
+          var right_node = parserTerm(tokenizer)
           op_node.add_child(right_node)
 
           left_node = op_node
@@ -142,7 +142,7 @@ class Parser() {
           
           tokenizer.selectNext()
 
-          var right_node = parserFactor(tokenizer)
+          var right_node = parserTerm(tokenizer)
           op_node.add_child(right_node)
 
           left_node = op_node
