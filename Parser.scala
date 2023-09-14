@@ -16,13 +16,13 @@ class Parser() {
 
       if (tokenizer.next._type ==  Types.INT) {
         var node = new IntVal(tokenizer.next._value)
-        println(tokenizer.next)
+        
         tokenizer.selectNext()
         node
       }
 
       else if (tokenizer.next._type ==  Types.PLUS.toString) {
-        println(tokenizer.next)
+        
         tokenizer.selectNext()
 
         var node  = new UnOp(Types.PLUS)
@@ -33,7 +33,7 @@ class Parser() {
       } 
 
       else if (tokenizer.next._type ==  Types.MINUS.toString) {
-        println(tokenizer.next)
+        
         tokenizer.selectNext()
 
         var node  = new UnOp(Types.MINUS)
@@ -44,12 +44,12 @@ class Parser() {
       } 
 
       else if (tokenizer.next._type == Types.OPEN_PARENTHESES.toString) {
-        println(tokenizer.next)
+        
         tokenizer.selectNext()
         var node = parserExpression(tokenizer)
 
         if(tokenizer.next._type == Types.CLOSE_PARENTHESES.toString){
-          println(tokenizer.next)
+          
           tokenizer.selectNext()
           node
         }else{
@@ -76,7 +76,7 @@ class Parser() {
         }
 
         else if(tokenizer.next._type == Types.TIMES.toString){
-          println(tokenizer.next)
+          
           var op_node = new BinOp(Types.TIMES)
           op_node.add_child(left_node)
           
@@ -89,7 +89,7 @@ class Parser() {
         }
 
         else if(tokenizer.next._type == Types.BAR.toString){
-          println(tokenizer.next)
+          
           var op_node = new BinOp(Types.BAR)
           op_node.add_child(left_node)
           
@@ -123,7 +123,7 @@ class Parser() {
         }
 
         else if(tokenizer.next._type == Types.MINUS.toString){
-          println(tokenizer.next)
+          
           var op_node = new BinOp(Types.MINUS)
           op_node.add_child(left_node)
           
@@ -136,7 +136,7 @@ class Parser() {
         }
 
         else if(tokenizer.next._type == Types.PLUS.toString){
-          println(tokenizer.next)
+          
           var op_node = new BinOp(Types.PLUS)
           op_node.add_child(left_node)
           
@@ -162,7 +162,6 @@ class Parser() {
     tokenizer.selectNext()
 
     var tree = parserExpression(tokenizer)
-    //println(tree.children(0).evaluate() , tree.children(1).evaluate())
     
     if(tokenizer.next._type != Types.EOF ){
       throw new InvalidExpression("\n Expected EOF type | Got " + tokenizer.next)

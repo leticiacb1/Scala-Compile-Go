@@ -7,7 +7,7 @@ object Main {
 
     if (args.length == 1){
       var code = PrePro.prePro(args(0))
-      println(code)
+      
       var parser = new Parser()
       var tree = parser.run(code)
 
