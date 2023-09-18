@@ -7,23 +7,22 @@ import prepro._
 
 object Main {
 
-  def load_file() : String = {
-    val input = Source.stdin
-    val linhas = input.getLines()
-
-    var source_code = ""
-
-    for (linha <- linhas) {
-      source_code = source_code + " " + linha
+  def load_file(fileName: String) : String = {
+   try {
+      val source = Source.fromFile(fileName)
+      val content = source.getLines().mkString("\n") // Concatena as linhas em uma única string
+      source.close()
+      content
+    } catch {
+      case e: Exception =>
+        println("Ocorreu um erro ao ler o arquivo: " + e.getMessage)
+        ""
     }
-
-    input.close()
-    source_code
   }
 
   def main(args: Array[String]) = {
-
-    var source_code = load_file()
+    val fileName = args(0)
+    var source_code = load_file(fileName)
     var code = PrePro.prePro(source_code)
     
     var parser = new Parser()
