@@ -25,8 +25,6 @@ object Main {
 
     var source_code = load_file()
     var code = PrePro.prePro(source_code)
-
-    println(code)
     
     var parser = new Parser()
     var tree = parser.run(code)
