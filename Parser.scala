@@ -7,8 +7,12 @@ import constants._
 import node._
 import binop._
 import unop._
-// import noop._
+import noop._
 import intval._
+import block._
+import assigment._
+import functions._
+import identifier._
 
 class Parser() {
 
@@ -17,6 +21,13 @@ class Parser() {
       if (tokenizer.next._type ==  Types.INT) {
         var node = new IntVal(tokenizer.next._value)
         
+        tokenizer.selectNext()
+        node
+      }
+
+      else if (tokenizer.next._type ==  Types.IDENTIFIER){
+        var node = new Identifier(tokenizer.next._value)
+
         tokenizer.selectNext()
         node
       }
@@ -156,12 +167,81 @@ class Parser() {
     left_node
   }
 
+  def parserStatement(tokenizer : Tokenizer) : Node = {
+    
+    if(tokenizer.next._type == Type.END_OF_LINE) {
+      tokenizer.selectNext()
+      new NoOp("END_OF_LINE")
+
+    }else if(tokenizer.next._type == Type.IDENTIFIER){
+      var node_identifier = new Identifier(tokenizer.next._value)
+      tokenizer.selectNext()
+
+      if(tokenizer.next._type == Type.EQUAL){
+        tokenizer.selectNext()
+
+        var expression = parserExpression(tokenizer)
+
+        var node_assigment = new Assigment(Type.EQUAL)
+        node_assigment.add_child(node_identifier)
+        node_assigment.add_child(expression)
+        node_assigment
+
+      }else{
+        throw new InvalidExpression("\n [STATEMENT] Expected assigment token | Got " + tokenizer.next)
+      }
+
+    } else if(tokenizer.next._type == Type.PRINTLN) {
+      tokenizer.selectNext()
+
+      if(tokenizer.next._type == Types.OPEN_PARENTHESES){
+        tokenizer.selectNext()
+
+        var expression = parserExpression(tokenizer)
+
+        var node_println = new Println(Values.PRINTLN)
+        node_println.add_child(expression)
+
+        if(tokenizer.next._type != Types.CLOSE_PARENTHESES){
+          throw new InvalidExpression("\n [STATEMENT] Expected close parentheses token | Got " + tokenizer.next)
+        }
+
+        tokenizer.selectNext()
+        node_println
+
+      }else{
+        throw new InvalidExpression("\n [STATEMENT] Expected open parentheses token | Got " + tokenizer.next)
+      }
+
+    }else{
+      throw new InvalidExpression("\n [STATEMENT] Token type recived : " + tokenizer.next)
+    }
+
+  }  
+
+  def parserBlock(tokenizer : Tokenizer) : Node = {
+    var node_block = new Block("BLOCK")
+    
+    breakable {
+      while(true){
+        if(tokenizer.next._type == Type.EOF){
+          break;
+        }else{
+          var statement = parserStatement(tokenizer)
+          node_block.add_child(statement)
+        }
+      }
+    }
+
+    node_block   
+  }
+
   def run(source_code : String) : Node = {
     
     var tokenizer  = new Tokenizer(source_code)
     tokenizer.selectNext()
 
-    var tree = parserExpression(tokenizer)
+    var tree = parserBlock(tokenizer)
     
     if(tokenizer.next._type != Types.EOF ){
       throw new InvalidExpression("\n Expected EOF type | Got " + tokenizer.next)

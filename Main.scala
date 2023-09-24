@@ -28,7 +28,6 @@ object Main {
     var parser = new Parser()
     var tree = parser.run(code)
 
-    println(tree.evaluate())
-
+    tree.evaluate()
   }
 }
