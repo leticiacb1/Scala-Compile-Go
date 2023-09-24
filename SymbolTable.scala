@@ -1,7 +1,7 @@
 package table
 
 class SymbolTable (){
-    var table : Map[String,Int]
+    var table : Map[String,Int] = Map.empty
 
     def getter(identifier : String): Int = {
         table.getOrElse(identifier, throw new NoSuchElementException(s"Chave não encontrada: $identifier"))

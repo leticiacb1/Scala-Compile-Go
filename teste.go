@@ -1,6 +1,8 @@
 // Comentario
-x = 2
-y = 2
+x = 5
+y = 3  // Comentario
 
-z = x+y
-println(z)
+var_z = ( x + y ) / 2 +- 1
+
+// Resposta : 
+println(var_z)

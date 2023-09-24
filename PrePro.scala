@@ -7,7 +7,7 @@ object PrePro {
         val pattern = "//.*".r
         val code = pattern.replaceAllIn(source_code, "")
 
-        code.replaceAll("\n", "")
+        code
     }
 
     def prePro(source_code : String) : String = {

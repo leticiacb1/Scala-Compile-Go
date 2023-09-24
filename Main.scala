@@ -21,7 +21,7 @@ object Main {
     }
   }
 
-  def main(args: Array[String]) = {
+  def main(args: Array[String]) : Unit = {
     val fileName = args(0)
     var source_code = load_file(fileName)
     var code = PrePro.prePro(source_code)

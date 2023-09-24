@@ -34,9 +34,8 @@ class Tokenizer ( _source : String){
                         var value_str : String = ""
     
                         breakable {
-                            while(position < source.length){
-                                
-                                if (source.charAt(position).isDigit){
+                            while(true){
+                                if (source.charAt(position).isDigit && position < source.length){
                                     value_str += source.charAt(position)
                                     position += 1
                                 }else{
@@ -99,19 +98,22 @@ class Tokenizer ( _source : String){
 
                     case c if c.isLetter => {
                         var value_str : String = ""
-                        //val pattern: Regex = "[a-zA-Z0-9_]+".r
                         
                         breakable {
-                            while((position < source.length) && (c.isDigit || c.isLetter || c == '_')) {
-                                value_str += c
-                                position += 1
+                            while(true) {
+                                if((position < source.length) && (source.charAt(position).isDigit || source.charAt(position).isLetter || source.charAt(position) == '_')){
+                                    value_str += source.charAt(position)
+                                    position += 1
+                                }else{
+                                    break;
+                                }
                             }
                         }
-
+                        
                         if (reserved_words.contains(value_str)){
                             next = new Token(_type = Types.PRINTLN , _value = Values.PRINTLN)
                         }else{
-                            next = new Token(_type = Types.IDENTIFIER , _value = value_str)
+                             next = new Token(_type = Types.IDENTIFIER , _value = value_str)
                         }
 
                         break;

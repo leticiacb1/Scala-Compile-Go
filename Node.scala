@@ -12,6 +12,9 @@ package node {
 
         def evaluate(symbol_table: SymbolTable) : Int
 
+        override def toString () : String = {
+            "<Node(value = " + _value +")>"
+        }
     }
 }
 
@@ -75,9 +78,9 @@ package unop {
 
 package noop {
     import node._
-    class NoOp(var _value : Any) extends Node (_value){
-        def evaluate(symbol_table: SymbolTable) : Unit =  { 
-            None
+    class NoOp(_value : Any) extends Node (_value){
+        def evaluate(symbol_table: SymbolTable) : Int =  { 
+            0
         }
     }
 }
@@ -85,10 +88,11 @@ package noop {
 package block {
     import node._
     class Block(_value : Any) extends Node (_value){
-        def evaluate(symbol_table : SymbolTable) : Unit =  { 
+        def evaluate(symbol_table : SymbolTable) : Int =  { 
             for (child <- children) {
                 child.evaluate(symbol_table)
             }
+            0
         }
     }
 }
@@ -97,10 +101,11 @@ package block {
 package assigment {
     import node._
     class Assigment(_value : Any) extends Node (_value){
-        def evaluate(symbol_table : SymbolTable) : Unit =  { 
+        def evaluate(symbol_table : SymbolTable) : Int =  { 
             // Não deve retornar nada
             var result = children(1).evaluate(symbol_table)
             symbol_table.setter(children(0)._value.toString , result)
+            0
         }
     }
 }
@@ -108,9 +113,10 @@ package assigment {
 package functions {
     import node._
     class Println(_value : Any) extends Node (_value){
-        def evaluate(symbol_table : SymbolTable) : Unit =  { 
+        def evaluate(symbol_table : SymbolTable) : Int =  { 
             var expression_result = children(0).evaluate(symbol_table)
             println(expression_result)
+            0
         }
     }
 }

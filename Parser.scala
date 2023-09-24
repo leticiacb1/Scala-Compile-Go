@@ -169,7 +169,7 @@ class Parser() {
 
   def parserStatement(tokenizer : Tokenizer) : Node = {
     
-    if(tokenizer.next._type == Types.END_OF_LINE) {
+    if(tokenizer.next._type == Types.END_OF_LINE.toString) {
       tokenizer.selectNext()
       new NoOp("END_OF_LINE")
 
@@ -177,7 +177,7 @@ class Parser() {
       var node_identifier = new Identifier(tokenizer.next._value)
       tokenizer.selectNext()
 
-      if(tokenizer.next._type == Types.EQUAL){
+      if(tokenizer.next._type == Types.EQUAL.toString){
         tokenizer.selectNext()
 
         var expression = parserExpression(tokenizer)
@@ -194,7 +194,7 @@ class Parser() {
     } else if(tokenizer.next._type == Types.PRINTLN) {
       tokenizer.selectNext()
 
-      if(tokenizer.next._type == Types.OPEN_PARENTHESES){
+      if(tokenizer.next._type == Types.OPEN_PARENTHESES.toString){
         tokenizer.selectNext()
 
         var expression = parserExpression(tokenizer)
@@ -202,7 +202,7 @@ class Parser() {
         var node_println = new Println(Values.PRINTLN)
         node_println.add_child(expression)
 
-        if(tokenizer.next._type != Types.CLOSE_PARENTHESES){
+        if(tokenizer.next._type != Types.CLOSE_PARENTHESES.toString){
           throw new InvalidExpression("\n [STATEMENT] Expected close parentheses token | Got " + tokenizer.next)
         }
 
