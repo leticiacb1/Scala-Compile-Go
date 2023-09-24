@@ -1,6 +1,7 @@
 import parser.Parser
 import scala.io.Source
 import prepro._
+import table.SymbolTable
 
 // Para passar o conteudo do arquivo para o programa rodar:
 // scala Main < meuarquivo.go
@@ -28,6 +29,7 @@ object Main {
     var parser = new Parser()
     var tree = parser.run(code)
 
-    tree.evaluate()
+    var symbol_table = new SymbolTable()
+    tree.evaluate(symbol_table)
   }
 }

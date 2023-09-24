@@ -23,19 +23,19 @@ package binop {
             _value match {
 
                 case Types.PLUS => {
-                    children(0).evaluate() + children(1).evaluate()  
+                    children(0).evaluate(symbol_table) + children(1).evaluate(symbol_table)  
                 }
 
                 case Types.MINUS => {
-                    children(0).evaluate() - children(1).evaluate()  
+                    children(0).evaluate(symbol_table) - children(1).evaluate(symbol_table)  
                 } 
 
                 case Types.BAR => { 
-                    children(0).evaluate() / children(1).evaluate()
+                    children(0).evaluate(symbol_table) / children(1).evaluate(symbol_table)
                 }
 
                 case Types.TIMES => {
-                    children(0).evaluate() * children(1).evaluate()
+                    children(0).evaluate(symbol_table) * children(1).evaluate(symbol_table)
                 }
 
                 case _ => {throw new Exception("Error de tipo")}
@@ -61,11 +61,11 @@ package unop {
             _value match {
 
                 case Types.PLUS => {
-                    children(0).evaluate()
+                    children(0).evaluate(symbol_table)
                 }
 
                 case Types.MINUS => {
-                    -children(0).evaluate()
+                    -children(0).evaluate(symbol_table)
                 }
                 case _  => {throw new Exception("Error de tipo")}
             }
@@ -100,7 +100,7 @@ package assigment {
         def evaluate(symbol_table : SymbolTable) : Unit =  { 
             // Não deve retornar nada
             var result = children(1).evaluate(symbol_table)
-            symbol_table.setter(children(0)._value , result)
+            symbol_table.setter(children(0)._value.toString , result)
         }
     }
 }
@@ -119,7 +119,7 @@ package identifier {
     import node._
     class Identifier(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : Int =  { 
-            symbol_table.getter(_value)
+            symbol_table.getter(_value.toString)
         }
     }
 }

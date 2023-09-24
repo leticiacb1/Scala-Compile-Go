@@ -13,7 +13,7 @@ object Types {
     val OPEN_PARENTHESES  = '('
     val CLOSE_PARENTHESES = ')'
     val END_OF_LINE       = '\n'
-    val PRINTLN           = "print"
+    val PRINTLN : String  = "print"
 }
 
 object Values {

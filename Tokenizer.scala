@@ -1,5 +1,6 @@
 package tokenizer
 
+import scala.util.matching.Regex
 import util.control.Breaks._
 import token.Token
 import constants._
@@ -9,9 +10,7 @@ class Tokenizer ( _source : String){
   var source : String = _source
   var position : Int = 0
   var next : Token = new Token("", 0)
-  var reserved_words : Map[String, Map[String, Any]] = Map(
-    "println" -> Map("type" -> Types.PRINTLN , "value" -> Values.PRINTLN),
-  )
+  var reserved_words : List[String] = List("println")
 
   def selectNext() : Unit = {
 
@@ -98,19 +97,19 @@ class Tokenizer ( _source : String){
                         break;
                     }
 
-                    case c if c.forall(_.isLetter) => {
+                    case c if c.isLetter => {
                         var value_str : String = ""
-                        val pattern: Regex = "[a-zA-Z0-9_]+".r
-
+                        //val pattern: Regex = "[a-zA-Z0-9_]+".r
+                        
                         breakable {
-                            while((position < source.length) && (pattern.matches(c))){
+                            while((position < source.length) && (c.isDigit || c.isLetter || c == '_')) {
                                 value_str += c
                                 position += 1
                             }
                         }
 
                         if (reserved_words.contains(value_str)){
-                            next = new Token(_type = reserved_words("println")("type") , _value = reserved_words("println")("value"))
+                            next = new Token(_type = Types.PRINTLN , _value = Values.PRINTLN)
                         }else{
                             next = new Token(_type = Types.IDENTIFIER , _value = value_str)
                         }

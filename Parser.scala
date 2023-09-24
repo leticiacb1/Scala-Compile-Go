@@ -169,20 +169,20 @@ class Parser() {
 
   def parserStatement(tokenizer : Tokenizer) : Node = {
     
-    if(tokenizer.next._type == Type.END_OF_LINE) {
+    if(tokenizer.next._type == Types.END_OF_LINE) {
       tokenizer.selectNext()
       new NoOp("END_OF_LINE")
 
-    }else if(tokenizer.next._type == Type.IDENTIFIER){
+    }else if(tokenizer.next._type == Types.IDENTIFIER){
       var node_identifier = new Identifier(tokenizer.next._value)
       tokenizer.selectNext()
 
-      if(tokenizer.next._type == Type.EQUAL){
+      if(tokenizer.next._type == Types.EQUAL){
         tokenizer.selectNext()
 
         var expression = parserExpression(tokenizer)
 
-        var node_assigment = new Assigment(Type.EQUAL)
+        var node_assigment = new Assigment(Types.EQUAL)
         node_assigment.add_child(node_identifier)
         node_assigment.add_child(expression)
         node_assigment
@@ -191,7 +191,7 @@ class Parser() {
         throw new InvalidExpression("\n [STATEMENT] Expected assigment token | Got " + tokenizer.next)
       }
 
-    } else if(tokenizer.next._type == Type.PRINTLN) {
+    } else if(tokenizer.next._type == Types.PRINTLN) {
       tokenizer.selectNext()
 
       if(tokenizer.next._type == Types.OPEN_PARENTHESES){
@@ -224,7 +224,7 @@ class Parser() {
     
     breakable {
       while(true){
-        if(tokenizer.next._type == Type.EOF){
+        if(tokenizer.next._type == Types.EOF){
           break;
         }else{
           var statement = parserStatement(tokenizer)

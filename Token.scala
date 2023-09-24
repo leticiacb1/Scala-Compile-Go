@@ -1,6 +1,6 @@
 package token
 
-class Token (var _type : String , var _value : Int){
+class Token (var _type : String , var _value : Any){
 
   override def toString  : String = {
   
