@@ -26,7 +26,7 @@ To know more : [Scala Official Documentation](https://docs.scala-lang.org/overvi
 
 ### Diagram ⚠️
 
-<img src = 'Diagrama.png'>
+<img src = 'Diagrama_v2-1.png'>
 
 ### EBNF
 
