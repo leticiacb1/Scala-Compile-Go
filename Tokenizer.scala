@@ -10,7 +10,7 @@ class Tokenizer ( _source : String){
   var source : String = _source
   var position : Int = 0
   var next : Token = new Token("", 0)
-  var reserved_words : List[String] = List("println","Println")
+  var reserved_words : List[String] = List("Println")
 
   def selectNext() : Unit = {
 
