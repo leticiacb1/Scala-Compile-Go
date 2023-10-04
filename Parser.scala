@@ -13,6 +13,7 @@ import block._
 import assigment._
 import functions._
 import identifier._
+import program._
 
 class Parser() {
 
@@ -285,6 +286,26 @@ class Parser() {
     }
 
     node_block   
+  }
+
+  def program(tokenizer : Tokenizer) : Node ={
+    var node_program = Program("PROGRAM")
+
+    breakable {
+      while(true){
+        if(tokenizer.next._type == Types.EOF){
+          break;
+        }else{
+          var statement = parserStatement(tokenizer)
+          node_program.add_child(statement)
+        }
+      }
+    }
+
+    // TEM ?
+    tokenizer.selectNext()
+    node_program
+
   }
 
   def run(source_code : String) : Node = {
