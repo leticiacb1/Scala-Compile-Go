@@ -219,6 +219,38 @@ class Parser() {
     left_node
   }
 
+  def parserBoolTerm(tokenizer : Tokenizer): Node = {
+
+  }
+
+  def parserBoolExpression(tokenizer : Tokenizer): Node = {
+    var left_node = parserBoolTerm(tokenizer)
+
+    breakable {
+      while(true){
+  
+        if(tokenizer.next._type != Types.OR){
+          break;
+        }
+
+        if(tokenizer.next._type != Types.OR){
+          var op_node = BinOp(Types.OR)
+          op_node.add_child(left_node)
+
+          tokenizer.selectNext()
+
+          var right_node = parserBoolTerm(tokenizer)
+          op_node.add_child(right_node)
+
+          left_node = op_node
+        }else {
+          throw new InvalidExpression("\n [BOOL EXPRESSION] Token type recived | Got " + tokenizer.next)
+        }
+      }
+    }  
+
+  }
+
   def parserStatement(tokenizer : Tokenizer) : Node = {
     
     if(tokenizer.next._type == Types.END_OF_LINE.toString) {
@@ -291,7 +323,7 @@ class Parser() {
           node_for.add_child(block)          
 
           node_for
-          
+
         }else{
           throw new InvalidExpression("\n [STATEMENT] Expected semicolon type | Got " + tokenizer.next)
         }
