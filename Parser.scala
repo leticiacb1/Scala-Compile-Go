@@ -165,7 +165,7 @@ class Parser() {
         }
 
         else {
-          throw new Exception("Token inválido")
+          throw new Exception("\n [TERM] Invalid token : " + tokenizer.next)
         }
 
       }
@@ -211,7 +211,7 @@ class Parser() {
           left_node = op_node
         }
         else {
-          throw new Exception("Token inválido")
+          throw new Exception("\n [EXPRESSION] Invalid token : " + tokenizer.next)
         }
       }
     }
@@ -439,7 +439,7 @@ class Parser() {
         tokenizer.selectNext()
         node_block
       } else {
-        throw new InvalidExpression("\n Expected END OF LINE type | Got " + tokenizer.next)
+        throw new InvalidExpression("\n [BLOCK] Expected END OF LINE type | Got " + tokenizer.next)
       }
     }
 
@@ -455,6 +455,13 @@ class Parser() {
           break;
         }else{
           var statement = parserStatement(tokenizer)
+
+          if(tokenizer.next._type == Types.END_OF_LINE.toString){
+            tokenizer.selectNext()
+          }else{
+             throw new InvalidExpression("\n [PROGRAM] Expected END OF LINE type | Got " + tokenizer.next)
+          }
+
           node_program.add_child(statement)
         }
       }

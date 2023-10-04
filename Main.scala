@@ -2,22 +2,24 @@ import parser.Parser
 import scala.io.Source
 import prepro._
 import table.SymbolTable
+import constants._
 
 // Para passar o conteudo do arquivo para o programa rodar:
 // scala Main < meuarquivo.go
 
 object Main {
 
-  def load_file(fileName: String) : String = {
+  def load_file(fileName: String) : List[String] = {
    try {
       val source = Source.fromFile(fileName)
-      val content = source.getLines().mkString("\n") // Concatena as linhas em uma única string
+      val content = source.getLines().map(_ + "\n").toList
+      
       source.close()
       content
     } catch {
       case e: Exception =>
-        println("Ocorreu um erro ao ler o arquivo: " + e.getMessage)
-        ""
+      println("\n [LOAD FILE] Fail to load file | " + e.getMessage)
+      List("Exception erro.")
     }
   }
 
