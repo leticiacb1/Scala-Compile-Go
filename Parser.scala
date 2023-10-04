@@ -99,6 +99,27 @@ class Parser() {
 
       }
 
+      else if(tokenizer.next._type == Types.SCANLN){
+        tokenizer.selectNext()
+
+        var node = new Scanln(Types.SCANLN)
+
+        if(tokenizer.next._type == Types.OPEN_PARENTHESES) { 
+          tokenizer.selectNext()
+          
+          if(tokenizer.next._type == Types.CLOSE_PARENTHESES) { 
+            tokenizer.selectNext()
+            node
+          }else{
+            throw new InvalidExpression("\n Expected close parentheses type | Got " + tokenizer.next)
+          }
+
+
+        }else {
+          throw new InvalidExpression("\n Expected open parentheses type | Got " + tokenizer.next)
+        }
+      }
+
       else {
         throw new InvalidExpression("\n Unexpected value in factor | Got " + tokenizer.next)
       }
