@@ -135,6 +135,22 @@ package functions {
             }
         }
     }
+
+    class For(_value : Any) extends Node (_value){
+        def evaluate(symbol_table : SymbolTable) : Int =  { 
+            
+            var init_state  = children(0).evaluate(symbol_table)
+            var condition   = children(1)
+            var increment   = children(2)
+            var block       = children(3)
+
+            // Teste para o for, talvez de errado e tenha que usar breakble
+            while (condition.evaluate(symbol_table)) {
+                block.evaluate(symbol_table)
+                increment.evaluate(symbol_table)
+            }
+
+        }
 }
 
 package identifier {
