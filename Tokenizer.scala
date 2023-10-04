@@ -144,13 +144,13 @@ class Tokenizer ( _source : String){
                     }
 
                     case Types.OPEN_KEY => {
-                        next = new Token(_type = Types.OPEN_KEY.toString , _value = Values.OPEN_KEY)
+                        next = new Token(_type = Types.OPEN_KEY.toString , _value = Values.KEYS)
                         position +=1
                         break;
                     }
 
                     case Types.CLOSE_KEY => {
-                        next = new Token(_type = Types.CLOSE_KEY.toString , _value = Values.CLOSE_KEY)
+                        next = new Token(_type = Types.CLOSE_KEY.toString , _value = Values.KEYS)
                         position +=1
                         break;
                     }
@@ -186,15 +186,13 @@ class Tokenizer ( _source : String){
                             if(value_str == Types.PRINTLN){
                                 next = new Token(_type = Types.PRINTLN , _value = Values.PRINTLN)
                             } else if(value_str == Types.SCANLN){ 
-                                next new Token(_type = Types.SCANLN , _value = Values.SCANLN)
+                                next = new Token(_type = Types.SCANLN , _value = Values.SCANLN)
                             } else if(value_str == Types.IF){
-                                next new Token(_type = Types.IF , _value = Values.IF)
+                                next = new Token(_type = Types.IF , _value = Values.IF)
                             } else if(value_str == Types.ELSE){
-                                next new Token(_type = Types.ELSE , _value = Values.ELSE)
+                                next = new Token(_type = Types.ELSE , _value = Values.ELSE)
                             } else if(value_str == Types.FOR){
-                                next new Token(_type = Types.FOR , _value = Values.FOR)
-                            } else{
-                                throw new InvalidExpression("\n [TOKENIZER] Invalid function value : " + value_str)
+                                next = new Token(_type = Types.FOR , _value = Values.FOR)
                             }
 
                         }else{

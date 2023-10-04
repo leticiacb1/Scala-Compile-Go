@@ -232,7 +232,7 @@ class Parser() {
         }
 
         if(tokenizer.next._type == Types.BIGGER_THEN){
-          var op_node = BinOp(Types.BIGGER_THEN)
+          var op_node = new BinOp(Types.BIGGER_THEN)
           op_node.add_child(left_node)
 
           tokenizer.selectNext()
@@ -243,7 +243,7 @@ class Parser() {
           left_node = op_node
 
         } else if (tokenizer.next._type == Types.LESS_THAN){
-          var op_node = BinOp(Types.LESS_THAN)
+          var op_node = new BinOp(Types.LESS_THAN)
           op_node.add_child(left_node)
 
           tokenizer.selectNext()
@@ -254,7 +254,7 @@ class Parser() {
           left_node = op_node
 
         } else if (tokenizer.next._type == Types.EQUAL_COMP){
-          var op_node = BinOp(Types.EQUAL_COMP)
+          var op_node = new BinOp(Types.EQUAL_COMP)
           op_node.add_child(left_node)
 
           tokenizer.selectNext()
@@ -283,7 +283,7 @@ class Parser() {
         }
 
         if(tokenizer.next._type != Types.AND){
-          var op_node = BinOp(Types.AND)
+          var op_node = new BinOp(Types.AND)
           op_node.add_child(left_node)
 
           tokenizer.selectNext()
@@ -312,7 +312,7 @@ class Parser() {
         }
 
         if(tokenizer.next._type != Types.OR){
-          var op_node = BinOp(Types.OR)
+          var op_node = new BinOp(Types.OR)
           op_node.add_child(left_node)
 
           tokenizer.selectNext()
@@ -365,7 +365,7 @@ class Parser() {
       tokenizer.selectNext()
 
       var bool_expression = parserBoolExpression(tokenizer)
-      var block_if        = block(tokenizer)
+      var block_if        = parserBlock(tokenizer)
 
       var node_if = new If(Types.IF)
       node_if.add_child(bool_expression)
@@ -374,7 +374,7 @@ class Parser() {
       if(tokenizer.next._type == Types.ELSE){
         tokenizer.selectNext()
 
-        var block_else = block(tokenizer)
+        var block_else = parserBlock(tokenizer)
         node_if.add_child(block_else)
       }
       node_if
@@ -393,10 +393,10 @@ class Parser() {
           tokenizer.selectNext()
 
           var increment = parserAssigment(tokenizer)
-          var block     = block(tokenizer)
+          var block     = parserBlock(tokenizer)
 
-          var node_for  = For(Types.FOR)
-          node_for.add_child(init_statement)
+          var node_for  = new For(Types.FOR)
+          node_for.add_child(init_state)
           node_for.add_child(condition)
           node_for.add_child(increment)
           node_for.add_child(block)          
@@ -416,10 +416,10 @@ class Parser() {
 
   }  
 
-  def block(tokenizer : Tokenizer) : Node = {
+  def parserBlock(tokenizer : Tokenizer) : Node = {
     var node_block = new Block("BLOCK")
     
-    if(tokenizer.next._type == Types.OPEN_KEY){
+    if(tokenizer.next._type == Types.OPEN_KEY) {
       tokenizer.selectNext()
       if(tokenizer.next._type == Types.END_OF_LINE) {
         tokenizer.selectNext()
@@ -444,7 +444,7 @@ class Parser() {
   }
 
   def program(tokenizer : Tokenizer) : Node ={
-    var node_program = Program("PROGRAM")
+    var node_program = new Program("PROGRAM")
 
     breakable {
       while(true){
