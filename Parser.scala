@@ -441,6 +441,8 @@ class Parser() {
         throw new InvalidExpression("\n Expected END OF LINE type | Got " + tokenizer.next)
       }
     }
+
+    node_block
   }
 
   def program(tokenizer : Tokenizer) : Node ={

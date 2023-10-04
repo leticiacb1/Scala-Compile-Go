@@ -30,7 +30,7 @@ class Token (var _type : String , var _value : Any){
             "(  " +  _type +  " , " + " OPEN_KEY " + ")"
         case "}" =>  
             "(  " + _type + " , " + " CLOSE_KEY " + ")"
-        case "}" =>  
+        case ";" =>  
             "(  " + _type + " , " + " SEMICOLON " + ")"
         case "\n" =>  
             "( \\n" + " , " + " END_OF_LINE " + ")"
