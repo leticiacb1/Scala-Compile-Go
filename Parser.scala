@@ -282,7 +282,7 @@ class Parser() {
           break;
         }
 
-        if(tokenizer.next._type != Types.AND){
+        if(tokenizer.next._type == Types.AND){
           var op_node = new BinOp(Types.AND)
           op_node.add_child(left_node)
 
@@ -303,6 +303,7 @@ class Parser() {
 
   def parserBoolExpression(tokenizer : Tokenizer): Node = {
     var left_node = parserBoolTerm(tokenizer)
+    println(tokenizer.next)
 
     breakable {
       while(true){
@@ -311,7 +312,7 @@ class Parser() {
           break;
         }
 
-        if(tokenizer.next._type != Types.OR){
+        if(tokenizer.next._type == Types.OR){
           var op_node = new BinOp(Types.OR)
           op_node.add_child(left_node)
 

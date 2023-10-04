@@ -92,7 +92,7 @@ package unop {
                 }
 
                 case Types.NOT => {
-                    !(children(0).evaluate(symbol_table).asInstanceOf[Boolean])
+                    !(children(0).evaluate(symbol_table))
                 }
 
                 case _  => {throw new Exception("Error de tipo")}
