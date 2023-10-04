@@ -1,14 +1,36 @@
+// Expression test
 Println(1)
 x = 3+6/3   *  2 -+-  +  2*4/2 + 0/1 -((6+ ((4)))/(2)) // Teste // Teste 2
 y_1 = 3
 y_1 = y_1 + 2
 z__ = x + y_1
-// Saida final
+
+
 Println(x)
 Println(z__+1)
 
+// If and Else test
 if x < 2 {
     Println(1)
 }else{
     Println(0)
 }
+
+// For test
+for i = 0 ; i < 10 ; i = i + 1 {
+
+    if i < 5 {
+        Println(0)
+    }
+
+    if i == 5 {
+        Println(5)
+    }
+}
+
+// Scanln test
+for j = 0 ; j < 10 ; j = j + 1 {
+    y = Scanln()
+    Println(y)
+}
+

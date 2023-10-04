@@ -95,7 +95,7 @@ class Parser() {
           tokenizer.selectNext()
           node
         }else{
-          throw new InvalidExpression("\n Expected close parentheses type | Got " + tokenizer.next)
+          throw new InvalidExpression("\n [FACTOR] Expected close parentheses type | Got " + tokenizer.next)
         }
 
       }
@@ -105,24 +105,24 @@ class Parser() {
 
         var node = new Scanln(Types.SCANLN)
 
-        if(tokenizer.next._type == Types.OPEN_PARENTHESES) { 
+        if(tokenizer.next._type == Types.OPEN_PARENTHESES.toString) { 
           tokenizer.selectNext()
           
-          if(tokenizer.next._type == Types.CLOSE_PARENTHESES) { 
+          if(tokenizer.next._type == Types.CLOSE_PARENTHESES.toString) { 
             tokenizer.selectNext()
             node
           }else{
-            throw new InvalidExpression("\n Expected close parentheses type | Got " + tokenizer.next)
+            throw new InvalidExpression("\n [FACTOR] Expected close parentheses type | Got " + tokenizer.next)
           }
 
 
         }else {
-          throw new InvalidExpression("\n Expected open parentheses type | Got " + tokenizer.next)
+          throw new InvalidExpression("\n [FACTOR] Expected open parentheses type | Got " + tokenizer.next)
         }
       }
 
       else {
-        throw new InvalidExpression("\n Unexpected value in factor | Got " + tokenizer.next)
+        throw new InvalidExpression("\n [FACTOR] Unexpected value in factor | Got " + tokenizer.next)
       }
     }
   
@@ -377,7 +377,6 @@ class Parser() {
         var block_else = parserBlock(tokenizer)
         node_if.add_child(block_else)
 
-        println(block_else)
       }
       node_if
 
