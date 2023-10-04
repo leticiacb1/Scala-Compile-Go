@@ -269,7 +269,35 @@ class Parser() {
       node_if
 
     } else if(tokenizer.next._type == Types.FOR){
-      
+      tokenizer.selectNext()
+
+      var init_state = parserAssigment(tokenizer)
+
+      if(tokenizer.next._type == Types.SEMICOLON){
+        tokenizer.selectNext()
+
+        var condition = parserBoolExpression(tokenizer)
+        
+        if(tokenizer.next._type == Types.SEMICOLON){
+          tokenizer.selectNext()
+
+          var increment = parserAssigment(tokenizer)
+          var block     = block(tokenizer)
+
+          var node_for  = For(Types.FOR)
+          node_for.add_child(init_statement)
+          node_for.add_child(condition)
+          node_for.add_child(increment)
+          node_for.add_child(block)          
+
+          node_for
+          
+        }else{
+          throw new InvalidExpression("\n [STATEMENT] Expected semicolon type | Got " + tokenizer.next)
+        }
+      }else{
+        throw new InvalidExpression("\n [STATEMENT] Expected semicolon type | Got " + tokenizer.next)
+      }
 
     }else{
       throw new InvalidExpression("\n [STATEMENT] Token type recived : " + tokenizer.next)
