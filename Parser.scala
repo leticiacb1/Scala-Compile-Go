@@ -88,7 +88,7 @@ class Parser() {
       else if (tokenizer.next._type == Types.OPEN_PARENTHESES.toString) {
         
         tokenizer.selectNext()
-        var node = parserExpression(tokenizer)
+        var node = parserBoolExpression(tokenizer)
 
         if(tokenizer.next._type == Types.CLOSE_PARENTHESES.toString){
           
