@@ -220,7 +220,32 @@ class Parser() {
   }
 
   def parserBoolTerm(tokenizer : Tokenizer): Node = {
+    var left_node = parserRlExpression(tokenizer)
 
+    breakable {
+      while(true){
+  
+        if(tokenizer.next._type != Types.AND){
+          break;
+        }
+
+        if(tokenizer.next._type != Types.AND){
+          var op_node = BinOp(Types.AND)
+          op_node.add_child(left_node)
+
+          tokenizer.selectNext()
+
+          var right_node = parserRlExpression(tokenizer)
+          op_node.add_child(right_node)
+
+          left_node = op_node
+        }else {
+          throw new InvalidExpression("\n [BOOL TERM EXPRESSION] Token type recived | Got " + tokenizer.next)
+        }
+      }
+    }
+
+    left_node
   }
 
   def parserBoolExpression(tokenizer : Tokenizer): Node = {
@@ -249,6 +274,7 @@ class Parser() {
       }
     }  
 
+    left_node
   }
 
   def parserStatement(tokenizer : Tokenizer) : Node = {
