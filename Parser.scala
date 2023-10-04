@@ -303,7 +303,6 @@ class Parser() {
 
   def parserBoolExpression(tokenizer : Tokenizer): Node = {
     var left_node = parserBoolTerm(tokenizer)
-    println(tokenizer.next)
 
     breakable {
       while(true){
