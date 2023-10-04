@@ -468,7 +468,7 @@ class Parser() {
     var tokenizer  = new Tokenizer(source_code)
     tokenizer.selectNext()
 
-    var tree = parserBlock(tokenizer)
+    var tree = program(tokenizer)
     
     if(tokenizer.next._type != Types.EOF ){
       throw new InvalidExpression("\n Expected EOF type | Got " + tokenizer.next)
