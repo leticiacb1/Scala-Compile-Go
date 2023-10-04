@@ -231,7 +231,7 @@ class Parser() {
           break;
         }
 
-        if(tokenizer.next._type == Types.BIGGER_THEN){
+        if(tokenizer.next._type == Types.BIGGER_THEN.toString){
           var op_node = new BinOp(Types.BIGGER_THEN)
           op_node.add_child(left_node)
 
@@ -242,7 +242,7 @@ class Parser() {
 
           left_node = op_node
 
-        } else if (tokenizer.next._type == Types.LESS_THAN){
+        } else if (tokenizer.next._type == Types.LESS_THAN.toString){
           var op_node = new BinOp(Types.LESS_THAN)
           op_node.add_child(left_node)
 
@@ -384,12 +384,12 @@ class Parser() {
 
       var init_state = parserAssigment(tokenizer)
 
-      if(tokenizer.next._type == Types.SEMICOLON){
+      if(tokenizer.next._type == Types.SEMICOLON.toString){
         tokenizer.selectNext()
 
         var condition = parserBoolExpression(tokenizer)
         
-        if(tokenizer.next._type == Types.SEMICOLON){
+        if(tokenizer.next._type == Types.SEMICOLON.toString){
           tokenizer.selectNext()
 
           var increment = parserAssigment(tokenizer)
@@ -419,14 +419,14 @@ class Parser() {
   def parserBlock(tokenizer : Tokenizer) : Node = {
     var node_block = new Block("BLOCK")
     
-    if(tokenizer.next._type == Types.OPEN_KEY) {
+    if(tokenizer.next._type == Types.OPEN_KEY.toString) {
       tokenizer.selectNext()
-      if(tokenizer.next._type == Types.END_OF_LINE) {
+      if(tokenizer.next._type == Types.END_OF_LINE.toString) {
         tokenizer.selectNext()
 
         breakable {
           while(true){
-            if(tokenizer.next._type == Types.CLOSE_KEY){
+            if(tokenizer.next._type == Types.CLOSE_KEY.toString){
               break;
             }else{
               var statement = parserStatement(tokenizer)
