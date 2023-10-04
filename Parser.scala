@@ -219,6 +219,59 @@ class Parser() {
     left_node
   }
 
+  def parserRlExpression(tokenizer : Tokenizer): Node = {
+    
+    var left_node = parserExpression(tokenizer)
+    var operators = List(Types.BIGGER_THEN.toString, Types.EQUAL_COMP.toString , Types.LESS_THAN)
+
+    breakable {
+      while(true){
+  
+        if(! operators.contains(tokenizer.next._type)){
+          break;
+        }
+
+        if(tokenizer.next._type == Types.BIGGER_THEN){
+          var op_node = BinOp(Types.BIGGER_THEN)
+          op_node.add_child(left_node)
+
+          tokenizer.selectNext()
+
+          var right_node = parserExpression(tokenizer)
+          op_node.add_child(right_node)
+
+          left_node = op_node
+
+        } else if (tokenizer.next._type == Types.LESS_THAN){
+          var op_node = BinOp(Types.LESS_THAN)
+          op_node.add_child(left_node)
+
+          tokenizer.selectNext()
+
+          var right_node = parserExpression(tokenizer)
+          op_node.add_child(right_node)
+
+          left_node = op_node
+
+        } else if (tokenizer.next._type == Types.EQUAL_COMP){
+          var op_node = BinOp(Types.EQUAL_COMP)
+          op_node.add_child(left_node)
+
+          tokenizer.selectNext()
+
+          var right_node = parserExpression(tokenizer)
+          op_node.add_child(right_node)
+
+          left_node = op_node
+        } else {
+          throw new InvalidExpression("\n [RL EXPRESSION] Token type recived | Got " + tokenizer.next)
+        }
+      }
+    }
+
+    left_node
+  }
+
   def parserBoolTerm(tokenizer : Tokenizer): Node = {
     var left_node = parserRlExpression(tokenizer)
 
