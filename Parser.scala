@@ -17,7 +17,7 @@ import program._
 
 class Parser() {
 
-  def parser_assigment(tokenizer : Tokenizer) : Node = {
+  def parserAssigment(tokenizer : Tokenizer) : Node = {
     
       var node_identifier = new Identifier(tokenizer.next._value)
       tokenizer.selectNext()
@@ -226,22 +226,7 @@ class Parser() {
       new NoOp("END_OF_LINE")
 
     }else if(tokenizer.next._type == Types.IDENTIFIER){
-      var node_identifier = new Identifier(tokenizer.next._value)
-      tokenizer.selectNext()
-
-      if(tokenizer.next._type == Types.EQUAL.toString){
-        tokenizer.selectNext()
-
-        var expression = parserExpression(tokenizer)
-
-        var node_assigment = new Assigment(Types.EQUAL)
-        node_assigment.add_child(node_identifier)
-        node_assigment.add_child(expression)
-        node_assigment
-
-      }else{
-        throw new InvalidExpression("\n [STATEMENT] Expected assigment token | Got " + tokenizer.next)
-      }
+      parserAssigment(tokenizer)
 
     } else if(tokenizer.next._type == Types.PRINTLN) {
       tokenizer.selectNext()
@@ -264,6 +249,27 @@ class Parser() {
       }else{
         throw new InvalidExpression("\n [STATEMENT] Expected open parentheses token | Got " + tokenizer.next)
       }
+
+    } else if(tokenizer.next._type == Types.IF) {
+      tokenizer.selectNext()
+
+      var bool_expression = parserBoolExpression(tokenizer)
+      var block_if        = block(tokenizer)
+
+      var node_if = new If(Types.IF)
+      node_if.add_child(bool_expression)
+      node_if.add_child(block_if)
+
+      if(tokenizer.next._type == Types.ELSE){
+        tokenizer.selectNext()
+
+        var block_else = block(tokenizer)
+        node_if.add_child(block_else)
+      }
+      node_if
+
+    } else if(tokenizer.next._type == Types.FOR){
+      
 
     }else{
       throw new InvalidExpression("\n [STATEMENT] Token type recived : " + tokenizer.next)
