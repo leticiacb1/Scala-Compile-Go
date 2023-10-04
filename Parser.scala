@@ -74,6 +74,16 @@ class Parser() {
         node
       } 
 
+      else if(tokenizer.next._type ==  Types.NOT.toString){
+        tokenizer.selectNext()
+
+        var node  = new UnOp(Types.NOT)
+        var child = parserFactor(tokenizer)
+
+        node.add_child(child)
+        node
+      }
+
       else if (tokenizer.next._type == Types.OPEN_PARENTHESES.toString) {
         
         tokenizer.selectNext()
