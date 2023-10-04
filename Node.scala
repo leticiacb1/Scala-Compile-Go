@@ -97,6 +97,18 @@ package block {
     }
 }
 
+package program {
+    import node._
+    class Program(_value : Any) extends Node (_value){
+        def evaluate(symbol_table : SymbolTable) : Int =  { 
+            for (child <- children) {
+                child.evaluate(symbol_table)
+            }
+            0
+        }
+    }
+}
+
 
 package assigment {
     import node._
