@@ -41,6 +41,26 @@ package binop {
                     children(0).evaluate(symbol_table) * children(1).evaluate(symbol_table)
                 }
 
+                case Types.OR => {
+                    children(0).evaluate(symbol_table) || children(1).evaluate(symbol_table)
+                }
+
+                case Types.AND => {
+                    children(0).evaluate(symbol_table) && children(1).evaluate(symbol_table)
+                }
+
+                case Types.BIGGER_THEN => {
+                    children(0).evaluate(symbol_table) > children(1).evaluate(symbol_table)
+                }
+
+                case Types.LESS_THAN => {
+                    children(0).evaluate(symbol_table) < children(1).evaluate(symbol_table)
+                }
+
+                case Types.EQUAL_COMP => {
+                    children(0).evaluate(symbol_table) == children(1).evaluate(symbol_table)
+                }
+
                 case _ => {throw new Exception("Error de tipo")}
             }
         }
