@@ -133,6 +133,7 @@ package functions {
                     children(2).evaluate(symbol_table)
                 }
             }
+            0
         }
     }
 
@@ -149,8 +150,17 @@ package functions {
                 block.evaluate(symbol_table)
                 increment.evaluate(symbol_table)
             }
-
+            0
         }
+    }
+
+    class Scanln (_value : Any) extends Node (_value){
+        def evaluate(symbol_table : SymbolTable) : Int =  { 
+            var number = scala.io.StdIn.readLine()
+            return number.toInt
+        }
+    }
+
 }
 
 package identifier {
