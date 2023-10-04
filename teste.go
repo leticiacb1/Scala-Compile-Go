@@ -7,7 +7,7 @@ z__ = x + y_1
 Println(x)
 Println(z__+1)
 
-if x > 2 {
+if x < 2 {
     Println(1)
 }else{
     Println(0)

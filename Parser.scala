@@ -222,7 +222,7 @@ class Parser() {
   def parserRlExpression(tokenizer : Tokenizer): Node = {
     
     var left_node = parserExpression(tokenizer)
-    var operators = List(Types.BIGGER_THEN.toString, Types.EQUAL_COMP.toString , Types.LESS_THAN)
+    var operators = List(Types.BIGGER_THEN.toString, Types.EQUAL_COMP.toString , Types.LESS_THAN.toString)
 
     breakable {
       while(true){
@@ -376,6 +376,8 @@ class Parser() {
 
         var block_else = parserBlock(tokenizer)
         node_if.add_child(block_else)
+
+        println(block_else)
       }
       node_if
 
