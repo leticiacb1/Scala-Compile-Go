@@ -16,6 +16,26 @@ import identifier._
 
 class Parser() {
 
+  def parser_assigment(tokenizer : Tokenizer) : Node = {
+    
+      var node_identifier = new Identifier(tokenizer.next._value)
+      tokenizer.selectNext()
+
+      if(tokenizer.next._type == Types.EQUAL.toString){
+        tokenizer.selectNext()
+
+        var bool_expression = parserBoolExpression(tokenizer)
+
+        var node_assigment = new Assigment(Types.EQUAL)
+        node_assigment.add_child(node_identifier)
+        node_assigment.add_child(bool_expression)
+        node_assigment
+
+      }else{
+        throw new InvalidExpression("\n [PARSER ASSIGMENT] Expected assigment token | Got " + tokenizer.next)
+      }
+  }
+
   def parserFactor(tokenizer : Tokenizer) : Node = {
 
       if (tokenizer.next._type ==  Types.INT) {
