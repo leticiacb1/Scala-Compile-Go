@@ -90,6 +90,11 @@ package unop {
                 case Types.MINUS => {
                     -children(0).evaluate(symbol_table)
                 }
+
+                case Types.NOT => {
+                    !children(0).evaluate(symbol_table)
+                }
+
                 case _  => {throw new Exception("Error de tipo")}
             }
         }
