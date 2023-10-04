@@ -119,6 +119,22 @@ package functions {
             0
         }
     }
+
+    class If(_value : Any) extends Node (_value){
+        def evaluate(symbol_table : SymbolTable) : Int =  { 
+            var conditional = children(0)
+            var block_if    = children(1) 
+
+            if(conditional.evaluate(symbol_table)){
+                block_if.evaluate(symbol_table)
+            }else if(children.size > 2){
+
+                if(! conditional.evaluate(symbol_table)){
+                    children(2).evaluate(symbol_table)
+                }
+            }
+        }
+    }
 }
 
 package identifier {
