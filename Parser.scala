@@ -271,21 +271,31 @@ class Parser() {
 
   }  
 
-  def parserBlock(tokenizer : Tokenizer) : Node = {
+  def block(tokenizer : Tokenizer) : Node = {
     var node_block = new Block("BLOCK")
     
-    breakable {
-      while(true){
-        if(tokenizer.next._type == Types.EOF){
-          break;
-        }else{
-          var statement = parserStatement(tokenizer)
-          node_block.add_child(statement)
+    if(tokenizer.next._type == Types.OPEN_KEY){
+      tokenizer.selectNext()
+      if(tokenizer.next._type == Types.END_OF_LINE) {
+        tokenizer.selectNext()
+
+        breakable {
+          while(true){
+            if(tokenizer.next._type == Types.CLOSE_KEY){
+              break;
+            }else{
+              var statement = parserStatement(tokenizer)
+              node_block.add_child(statement)
+            }
+          }
         }
+
+        tokenizer.selectNext()
+        node_block
+      } else {
+        throw new InvalidExpression("\n Expected END OF LINE type | Got " + tokenizer.next)
       }
     }
-
-    node_block   
   }
 
   def program(tokenizer : Tokenizer) : Node ={
