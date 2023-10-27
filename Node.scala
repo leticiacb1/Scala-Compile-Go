@@ -100,7 +100,7 @@ package binop {
 
                 case Types.EQUAL_COMP => {
                     if(type1 != type2){
-                        IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in < operation : {$type1} < {$type2}")
+                        IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in == operation : {$type1} == {$type2}")
                     }
 
                     (if (value1 == value2) 1 else 0 ,   Types.TYPE_INT)
@@ -187,9 +187,15 @@ package assigment {
     import node._
     class Assigment(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : Unit =  { 
-            // Não deve retornar nada
-            var result = children(1).evaluate(symbol_table).asInstanceOf[Int]
-            symbol_table.setter(children(0)._value.toString , result)
+
+            var (identifier , type1) = symbol_table.getter(children(0)._value)
+            var (result_expression, type2) = children(1).evaluate(symbol_table)
+
+            if(type1 != type2) {
+                IncompatibleTypes(s" [ASSIGMENT - EVALUATE] Setting a value type [$type2] inconsistent with the variable type [$type1]")
+            }
+
+            symbol_table.setter(children(0)._value , reresult_expressionsult)
         }
     }
 }
