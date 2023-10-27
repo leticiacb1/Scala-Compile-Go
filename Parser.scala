@@ -417,6 +417,32 @@ class Parser() {
       }else{
         throw new InvalidExpression("\n [STATEMENT] Expected semicolon type | Got " + tokenizer.next)
       }
+    }else if(tokenizer.next._type == Types.VAR){
+      tokenizer.selectNext()
+
+      if(tokenizer.next._type == Types.IDENTIFIER){
+        var node_identifier = new Identifier(tokenizer.next._value)
+        tokenizer.selectNext()
+
+        if((tokenizer.next._type == Types.TYPE_INT) || (tokenizer.next._type == Types.TYPE_STR)){
+          var var_dec = new VarDec(tokenizer.next._type)
+          var_dec.add_child(node_identifier)
+
+          tokenizer.selectNext()
+          if(tokenizer.next._type == Types.EQUAL) {
+            tokenizer.selectNext()
+            var bool_expression = parserBoolExpression()
+            var_dec.add_child(bool_expression)
+          }
+
+          var_dec
+        }else{
+          throw new InvalidExpression("\n [STATEMENT] Expected 'type' type | Got " + tokenizer.next)
+        }
+
+      }else{
+        throw new InvalidExpression("\n [STATEMENT] Expected identifier type | Got " + tokenizer.next)
+      }
 
     }else{
       throw new InvalidExpression("\n [STATEMENT] Token type recived : " + tokenizer.next)
