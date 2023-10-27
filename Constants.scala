@@ -40,8 +40,11 @@ object Types {
 
     val CONCAT       = '.'
 
-    val TYPE_INT     = "INT"
-    val TYPE_STR     = "STRING"
+    val TYPE_INT     = "int"
+    val TYPE_STR     = "string"
+    val VARIABLE_STR = "variable_str"
+
+    val QUOTATION_MARKS  = '"'
 }
 
 object Values {
@@ -79,4 +82,8 @@ object Values {
 
     val TYPE_INT     = 22
     val TYPE_STR     = 23
+    val VARIABLE_STR = 24
+
+    val QUOTATION_MARKS = 25
+    val FUNCTIONS = 26
 }

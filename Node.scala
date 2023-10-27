@@ -204,7 +204,7 @@ package functions {
     import node._
     class Println(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : Unit =  { 
-            var expression_result = children(0).evaluate(symbol_table)
+            var (expression_result , _type) = children(0).evaluate(symbol_table)
             println(expression_result)
         }
     }
@@ -214,11 +214,11 @@ package functions {
             var conditional = children(0)
             var block_if    = children(1) 
 
-            if(conditional.evaluate(symbol_table).asInstanceOf[Boolean]) {
+            var value , _type = conditional.evaluate(symbol_table)
+            if(value) {
                 block_if.evaluate(symbol_table)
             }else if(children.size > 2){
-
-                if(!(conditional.evaluate(symbol_table).asInstanceOf[Boolean])){
+                if(!(value)){
                     children(2).evaluate(symbol_table)
                 }
             }
@@ -228,23 +228,32 @@ package functions {
     class For(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : Unit =  { 
             
-            var init_state  = children(0).evaluate(symbol_table)
+            children(0).evaluate(symbol_table)
             var condition   = children(1)
             var increment   = children(2)
             var block       = children(3)
 
             // Teste para o for, talvez de errado e tenha que usar breakble
-            while (condition.evaluate(symbol_table).asInstanceOf[Boolean]) {
+            var (value, _type) = condition.evaluate(symbol_table)
+            while (value) {
                 block.evaluate(symbol_table)
                 increment.evaluate(symbol_table)
+
+                (value, _type) = condition.evaluate(symbol_table)
             }
         }
     }
 
     class Scanln (_value : Any) extends Node (_value){
-        def evaluate(symbol_table : SymbolTable) : Int =  { 
+        def evaluate(symbol_table : SymbolTable) : (Any , String) =  { 
             var number = scala.io.StdIn.readLine()
-            return number.toInt
+
+            if(!number.isDigit){
+                var _type = number.getClass.getSimpleName
+                throw new InvalidType(f" [SCANLN - EVALUATE] Only the integer type is accepted in the Scanln function. Tried type: $_type")
+            }
+
+            (number.toInt , types.TYPE_INT)
         }
     }
 
@@ -254,7 +263,8 @@ package identifier {
     import node._
     class Identifier(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : Int =  { 
-            symbol_table.getter(_value.toString)
+            var value , _type = symbol_table.getter(_value.toString)
+            (value, _type)
         }
     }
 }

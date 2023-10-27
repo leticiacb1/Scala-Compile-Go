@@ -10,7 +10,7 @@ class Tokenizer ( _source : String){
   var source : String = _source
   var position : Int = 0
   var next : Token = new Token("", 0)
-  var reserved_words : List[String] = List("Println" , "Scanln" , "for" , "if" , "else")
+  var reserved_words : List[String] = List("Println" , "Scanln" , "for" , "if" , "else" , "var" , "int" , "string")
 
   def selectNext() : Unit = {
 
@@ -131,6 +131,12 @@ class Tokenizer ( _source : String){
                         
                     }
 
+                    case Types.CONCAT => {
+                        next = new Token(_type = Types.CONCAT , _value =Values.CONCAT)
+                        position += 1
+                        break;
+                    }
+
                     case Types.OPEN_PARENTHESES => {
                         next = new Token(_type = Types.OPEN_PARENTHESES.toString , _value = Values.PARENTHESES)
                         position +=1
@@ -167,6 +173,19 @@ class Tokenizer ( _source : String){
                         break;
                     }
 
+                    case Types.QUOTATION_MARKS => {
+                        var value_str : String = ""
+                        position += 1
+
+                        while(source.charAt(position) != Types.QUOTATION_MARKS){
+                            value_str += source.charAt(position)
+                            position += 1
+                        }
+
+                        position += 1
+                        next = new Token(_type = Types.VARIABLE_STR , _value = value_str)
+                    }
+
                     case c if c.isLetter => {
                         var value_str : String = ""
                         
@@ -182,18 +201,7 @@ class Tokenizer ( _source : String){
                         }
                         
                         if (reserved_words.contains(value_str)){
-
-                            if(value_str == Types.PRINTLN){
-                                next = new Token(_type = Types.PRINTLN , _value = Values.PRINTLN)
-                            } else if(value_str == Types.SCANLN){ 
-                                next = new Token(_type = Types.SCANLN , _value = Values.SCANLN)
-                            } else if(value_str == Types.IF){
-                                next = new Token(_type = Types.IF , _value = Values.IF)
-                            } else if(value_str == Types.ELSE){
-                                next = new Token(_type = Types.ELSE , _value = Values.ELSE)
-                            } else if(value_str == Types.FOR){
-                                next = new Token(_type = Types.FOR , _value = Values.FOR)
-                            }
+                            next = new Token(_type = value_str , _value = Values.FUNCTIONS)
 
                         }else{
                              next = new Token(_type = Types.IDENTIFIER , _value = value_str)

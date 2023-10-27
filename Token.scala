@@ -35,15 +35,15 @@ class Token (var _type : String , var _value : Any){
         case "\n" =>  
             "( \\n" + " , " + " END_OF_LINE " + ")"
 
-        case "PRINTLN" => 
+        case "Println" => 
             "( " + _value + " , " + _type + ")"
-        case "IF" => 
+        case "if" => 
             "( " + _value + " , " + _type + ")"
-        case "ELSE" => 
+        case "else" => 
             "( " + _value + " , " + _type + ")"
-        case "FOR" => 
+        case "for" => 
             "( " + _value + " , " + _type + ")"
-        case "SCANLN" => 
+        case "Scanln" => 
             "( " + _value + " , " + _type + ")"
 
 
