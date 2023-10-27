@@ -12,7 +12,7 @@ package node {
             children = children :+ child
         }
 
-        def evaluate(symbol_table: SymbolTable) : Any
+        def evaluate(symbol_table: SymbolTable) : (Any , String)
 
         override def toString () : String = {
             "<Node(value = " + _value +")>"
@@ -24,7 +24,7 @@ package binop {
     import node._
     class BinOp(_value : Any) extends Node(_value){
 
-        def evaluate(symbol_table: SymbolTable) : (Int , Int | String) =  { 
+        def evaluate(symbol_table: SymbolTable) : (Any , String) =  { 
             
             var (value1 , type1) = children(0).evaluate(symbol_table)
             var (value2 , type2) = children(1).evaluate(symbol_table)
@@ -120,8 +120,8 @@ package binop {
 package intval {
     import node._
     class IntVal(_value : Any) extends Node (_value){
-        def evaluate(symbol_table: SymbolTable) : Any =  { 
-            _value.asInstanceOf[Int]
+        def evaluate(symbol_table: SymbolTable) : (Any, String) =  { 
+            ( _value.asInstanceOf[Int] , types.TYPE_INT )
         }
     }
 }
