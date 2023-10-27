@@ -262,9 +262,30 @@ package functions {
 package identifier {
     import node._
     class Identifier(_value : Any) extends Node (_value){
-        def evaluate(symbol_table : SymbolTable) : Int =  { 
+        def evaluate(symbol_table : SymbolTable) : (Any , String) =  { 
             var value , _type = symbol_table.getter(_value.toString)
             (value, _type)
+        }
+    }
+}
+
+package vardec {
+    import node._
+    class VarDec(_value : Any) extends Node (_value){
+        def evaluate(symbol_table : SymbolTable) : Unit =  { 
+            type1 = _value
+            symbol_table.create(children(0)._value , type1)
+
+            if(children.size == 2){
+                var (boolExpression , type2) = children(1).evaluate(symbol_table)
+
+                if(type1 == type2){
+                    symbol_table.setter(children(0)._value , boolExpression)
+                }else{
+                    IncompatibleTypes(s" [VARDEC - EVALUATE] Setting a value type [$type2] inconsistent with the variable type [$type1]")
+                }
+            }
+
         }
     }
 }

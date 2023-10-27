@@ -19,6 +19,8 @@ class Token (var _type : String , var _value : Any){
             "( " + _type + " , " + "BAR " + ")"
         case "=" =>  
             "( " + _type  + " , " + " EQUAL " + ")"
+        case "." =>  
+            "( ." + " , " + " CONCAT " + ")"
 
         case "EOF" =>  
             "( " + _type + " , " + "EOF " + ")"
@@ -45,7 +47,12 @@ class Token (var _type : String , var _value : Any){
             "( " + _value + " , " + _type + ")"
         case "Scanln" => 
             "( " + _value + " , " + _type + ")"
-
+        case "var" => 
+            "( " + _value + " , " + _type + ")"
+        case "int" => 
+            "( " + _value + " , " + _type + ")"
+        case "string" => 
+            "( " + _value + " , " + _type + ")"
 
         case "IDENTIFIER" => 
             "( " + _value + " , " + _type + ")"
