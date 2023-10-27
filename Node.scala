@@ -110,7 +110,7 @@ package binop {
                     (value1x.toString + value2x.toString  ,  Types.TYPE_STR)
                 }
 
-                case _ => {throw new Exception("Error de tipo")}
+                case _ => {throw new InvalidOperators(s" [BinOp - Evaluate] Invalid operator type = $_value")}
             }
         }
     }
@@ -129,22 +129,25 @@ package intval {
 package unop {
     import node._
     class UnOp(_value : Any) extends Node (_value){
-        def evaluate(symbol_table: SymbolTable) : Any =  { 
+        def evaluate(symbol_table: SymbolTable) : (Any, String) =  { 
+            
+            var (value , _type) = children(0).evaluate(symbol_table)
+            
             _value match {
 
                 case Types.PLUS => {
-                    children(0).evaluate(symbol_table).asInstanceOf[Int]
+                    ((1)*value , _type)
                 }
 
                 case Types.MINUS => {
-                    -(children(0).evaluate(symbol_table).asInstanceOf[Int])
+                    ((-1)*value , _type)
                 }
 
                 case Types.NOT => {
-                    !(children(0).evaluate(symbol_table).asInstanceOf[Boolean])
+                    (!value , _type)
                 }
 
-                case _  => {throw new Exception("Error de tipo")}
+                case _  => {throw new InvalidOperators(s" [UnOp - Evaluate] Invalid operator type = $_value")}
             }
         }
     }
