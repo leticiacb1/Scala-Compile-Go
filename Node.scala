@@ -1,5 +1,7 @@
 import constants._
 import table.SymbolTable
+import constants._
+import errors._
 
 package node {
     abstract class Node (val _value : Any){
@@ -22,43 +24,90 @@ package binop {
     import node._
     class BinOp(_value : Any) extends Node(_value){
 
-        def evaluate(symbol_table: SymbolTable) : Any =  { 
+        def evaluate(symbol_table: SymbolTable) : (Int , Int | String) =  { 
+            
+            var (value1 , type1) = children(0).evaluate(symbol_table)
+            var (value2 , type2) = children(1).evaluate(symbol_table)
+            
             _value match {
 
                 case Types.PLUS => {
-                    children(0).evaluate(symbol_table).asInstanceOf[Int] + children(1).evaluate(symbol_table).asInstanceOf[Int]  
+                    if( !((type1 == type2) && (type1 == Types.TYPE_INT)) ){
+                        IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in + operation : {$type1} + {$type2}")
+                    }
+
+                    (value1 + value2 , Types.TYPE_INT)  
                 }
 
                 case Types.MINUS => {
-                    children(0).evaluate(symbol_table).asInstanceOf[Int] - children(1).evaluate(symbol_table).asInstanceOf[Int]  
+                    if( !((type1 == type2) && (type1 == Types.TYPE_INT)) ){
+                        IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in - operation : {$type1} - {$type2}")
+                    }
+
+                    (value1 - value2 , Types.TYPE_INT)
                 } 
 
                 case Types.BAR => { 
-                    children(0).evaluate(symbol_table).asInstanceOf[Int] / children(1).evaluate(symbol_table).asInstanceOf[Int]
+                    if( !((type1 == type2) && (type1 == Types.TYPE_INT)) ){
+                        IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in / operation : {$type1} / {$type2}")
+                    }
+
+                    (value1/value2 , Types.TYPE_INT)
                 }
 
                 case Types.TIMES => {
-                    children(0).evaluate(symbol_table).asInstanceOf[Int] * children(1).evaluate(symbol_table).asInstanceOf[Int]
+                    if( !((type1 == type2) && (type1 == Types.TYPE_INT)) ){
+                        IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in * operation : {$type1} * {$type2}")
+                    }
+
+                   (value1*value2 , Types.TYPE_INT)
                 }
 
                 case Types.OR => {
-                    children(0).evaluate(symbol_table).asInstanceOf[Boolean] || children(1).evaluate(symbol_table).asInstanceOf[Boolean]
+
+                    if( !((type1 == type2) && (type1 == Types.TYPE_INT)) ){
+                        IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in OR operation : {$type1} || {$type2}")
+                    }
+
+                    (if (value1 || value2) 1 else 0 ,   Types.TYPE_INT)
                 }
 
                 case Types.AND => {
-                    children(0).evaluate(symbol_table).asInstanceOf[Boolean] && children(1).evaluate(symbol_table).asInstanceOf[Boolean]
+                    if( !((type1 == type2) && (type1 == Types.TYPE_INT)) ){
+                        IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in AND operation : {$type1} && {$type2}")
+                    }
+
+                    (if (value1 && value2) 1 else 0 ,   Types.TYPE_INT)
                 }
 
                 case Types.BIGGER_THEN => {
-                    children(0).evaluate(symbol_table).asInstanceOf[Int] > children(1).evaluate(symbol_table).asInstanceOf[Int]
+
+                    if(type1 != type2){
+                        IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in > operation : {$type1} > {$type2}")
+                    }
+
+                    (if (value1 > value2) 1 else 0 ,   Types.TYPE_INT)
                 }
 
                 case Types.LESS_THAN => {
-                    children(0).evaluate(symbol_table).asInstanceOf[Int] < children(1).evaluate(symbol_table).asInstanceOf[Int]
+
+                    if(type1 != type2){
+                        IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in < operation : {$type1} < {$type2}")
+                    }
+
+                    (if (value1 < value2) 1 else 0 ,   Types.TYPE_INT)
                 }
 
                 case Types.EQUAL_COMP => {
-                    children(0).evaluate(symbol_table) == children(1).evaluate(symbol_table)
+                    if(type1 != type2){
+                        IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in < operation : {$type1} < {$type2}")
+                    }
+
+                    (if (value1 == value2) 1 else 0 ,   Types.TYPE_INT)
+                }
+
+                case Types.CONCAT => {
+                    (value1x.toString + value2x.toString  ,  Types.TYPE_STR)
                 }
 
                 case _ => {throw new Exception("Error de tipo")}

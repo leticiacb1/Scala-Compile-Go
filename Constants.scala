@@ -37,6 +37,11 @@ object Types {
     val OR           = "||"
     val O            = '|'
     val NOT          = '!'
+
+    val CONCAT       = '.'
+
+    val TYPE_INT     = "INT"
+    val TYPE_STR     = "STRING"
 }
 
 object Values {
@@ -69,4 +74,9 @@ object Values {
     val AND         = 18
     val OR          = 19
     val NOT         = 20
+
+    val CONCAT       = 21
+
+    val TYPE_INT     = 22
+    val TYPE_STR     = 23
 }
