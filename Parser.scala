@@ -46,6 +46,13 @@ class Parser() {
         node
       }
 
+      else if (tokenizer.next._type == Types.VARIABLE_STR){
+        var node = new StrVal(tokenizer.next._value)
+
+        tokenizer.selectNext()
+        node
+      }
+
       else if (tokenizer.next._type ==  Types.IDENTIFIER){
         var node = new Identifier(tokenizer.next._value)
 
