@@ -217,7 +217,19 @@ class Parser() {
 
           left_node = op_node
         }
-        else {
+
+        else if(tokenizer.next._type == Types.CONCAT.toString){
+          
+          var op_node = new BinOp(Types.CONCAT)
+          op_node.add_child(left_node)
+          
+          tokenizer.selectNext()
+
+          var right_node = parserTerm(tokenizer)
+          op_node.add_child(right_node)
+
+          left_node = op_node
+        }else {
           throw new Exception("\n [EXPRESSION] Invalid token : " + tokenizer.next)
         }
       }
