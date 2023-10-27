@@ -126,6 +126,15 @@ package intval {
     }
 }
 
+package strval {
+    import node._
+    class StrVal(_value : Any) extends Node (_value){
+        def evaluate(symbol_table: SymbolTable) : (Any, String) =  { 
+            ( _value.asInstanceOf[String] , types.TYPE_STR )
+        }
+    }
+}
+
 package unop {
     import node._
     class UnOp(_value : Any) extends Node (_value){
