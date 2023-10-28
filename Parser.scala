@@ -25,9 +25,12 @@ class Parser() {
       tokenizer.selectNext()
 
       if(tokenizer.next._type == Types.EQUAL.toString){
+        print(" ACHOU O EQUAL \n")
         tokenizer.selectNext()
 
+        print(s" PRÓXIMO TOKEN value: ${tokenizer.next._value}  , type : ${tokenizer.next._type}")
         var bool_expression = parserBoolExpression(tokenizer)
+        print(s"Bool expression : $bool_expression")
 
         var node_assigment = new Assigment(Types.EQUAL)
         node_assigment.add_child(node_identifier)
@@ -130,7 +133,7 @@ class Parser() {
       }
 
       else {
-        throw new InvalidExpression("\n [FACTOR] UnexpeparserRlExpressioncted value in factor | Got " + tokenizer.next)
+        throw new InvalidExpression("\n [FACTOR] Unexpected value in factor | Got " + tokenizer.next)
       }
     }
   
@@ -239,7 +242,8 @@ class Parser() {
   }
 
   def parserRlExpression(tokenizer : Tokenizer): Node = {
-    
+    print("==== RL EXPRESSION =====\n")
+    print(tokenizer.next._type)
     var left_node = parserExpression(tokenizer)
     var operators = List(Types.BIGGER_THEN.toString, Types.EQUAL_COMP.toString , Types.LESS_THAN.toString)
 
@@ -292,6 +296,7 @@ class Parser() {
   }
 
   def parserBoolTerm(tokenizer : Tokenizer): Node = {
+    print(" ==== BOOL TERM ====\n")
     var left_node = parserRlExpression(tokenizer)
 
     breakable {
@@ -321,6 +326,8 @@ class Parser() {
   }
 
   def parserBoolExpression(tokenizer : Tokenizer): Node = {
+    print(" === BOOL EXPRESSION ===\n")
+    print(s" Token value : ${tokenizer.next._value} e type : ${tokenizer.next._type}\n")
     var left_node = parserBoolTerm(tokenizer)
 
     breakable {
@@ -350,7 +357,10 @@ class Parser() {
   }
 
   def parserStatement(tokenizer : Tokenizer) : Node = {
-    
+    print(" ===== STATEMENT =====\n")
+    print(tokenizer.next._type + "\n")
+    print(tokenizer.next._value.toString + "\n")
+
     if(tokenizer.next._type == Types.END_OF_LINE.toString) {
       tokenizer.selectNext()
       new NoOp("END_OF_LINE")

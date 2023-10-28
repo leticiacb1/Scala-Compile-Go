@@ -205,15 +205,19 @@ package assigment {
     import node._
     class Assigment(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : (Unit, Unit) =  { 
-
-            var (identifier , type1) = symbol_table.getter(children(0)._value.asInstanceOf[String])
+            var (old_identifier_value , type1) = symbol_table.getter(children(0)._value.asInstanceOf[String])
             var (result_expression, type2) = children(1).evaluate(symbol_table)
-
+            
             if(type1 != type2) {
                 throw new IncompatibleTypes(s" [ASSIGMENT - EVALUATE] Setting a value type [$type2] inconsistent with the variable type [$type1]")
             }
 
-            symbol_table.setter(children(0)._value.asInstanceOf[String] , result_expression.asInstanceOf[Int])
+            if(type1 == Types.TYPE_INT){
+                symbol_table.setter(children(0)._value.asInstanceOf[String] , result_expression.asInstanceOf[Int])
+            }else{
+                symbol_table.setter(children(0)._value.asInstanceOf[String] , result_expression.asInstanceOf[String])
+            }
+
             (Unit , Unit)
         }
     }
@@ -305,12 +309,16 @@ package vardec {
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
             var type1 = _value
             symbol_table.create(children(0)._value.asInstanceOf[String] , type1.asInstanceOf[String])
-
+            
             if(children.size == 2){
                 var (boolExpression , type2) = children(1).evaluate(symbol_table)
-
+                
                 if(type1 == type2){
-                    symbol_table.setter(children(0)._value.asInstanceOf[String] , boolExpression.asInstanceOf[Int])
+                    if(type2 == Types.TYPE_INT){
+                        symbol_table.setter(children(0)._value.asInstanceOf[String] , boolExpression.asInstanceOf[Int])
+                    }else{
+                        symbol_table.setter(children(0)._value.asInstanceOf[String] , boolExpression.asInstanceOf[String])
+                    }
                 }else{
                     throw new IncompatibleTypes(s" [VARDEC - EVALUATE] Setting a value type [$type2] inconsistent with the variable type [$type1]")
                 }

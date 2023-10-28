@@ -8,13 +8,14 @@ class SymbolTable (){
     // table = { var : (value , type)}
     //O tipo pode ser "INT" ou "STRING" .
 
-    var table : Map[String,(Int, String)] = Map.empty
+    var table : Map[String,(Any, String)] = Map.empty
 
-    def getter(identifier : String): (Int, String) = {
-        
-        var (value , _type) = (0 , "null")
+    def getter(identifier : String): (Any, String) = {
+        var value : Any  = ""
+        var _type : String  = ""
 
         if(table.get(identifier).isDefined){
+            print(f" A chave $identifier esta definida\n")
             var result = table.get(identifier)
             value = result.get._1
             _type = result.get._2
@@ -29,11 +30,12 @@ class SymbolTable (){
         if(table.get(identifier).isDefined){
             throw new ExistingKey(s"Chave já existente : $identifier")
         }else{
+            print(s" Seta o valor do identifier : $identifier com tipo : ${_type}")
             table = table + (identifier -> (0 , _type)) 
         }
     }
 
-    def setter(identifier : String, value : Int) : Unit = {
+    def setter(identifier : String, value : Any) : Unit = {
         var _type = table.get(identifier).get._2
         table = table + (identifier -> (value, _type))
     }

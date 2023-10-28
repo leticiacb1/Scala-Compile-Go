@@ -49,14 +49,14 @@ Println(y < z)
 Println(y > z)
 
 // All str operations 
-// var a string 
-// var b string
+var a string 
+var b string
 
-// x_1 = 1 
-// y = 1 
-// z = 2
-// a = "abc"
-// b = "def"
+x_1 = 1 
+y = 1 
+z = 2
+a = "abc"
+b = "def"
 // Println(a.b)
 // Println(a.x_1)
 // Println(x_1.a)
