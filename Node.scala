@@ -64,7 +64,6 @@ package binop {
                 }
 
                 case Types.OR => {
-                    print(" ==== OR EVALUATE ====\n")
                     if( !((type1 == type2) && (type1 == Types.TYPE_INT)) ){
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in OR operation : {$type1} || {$type2}")
                     }
@@ -73,8 +72,6 @@ package binop {
                     var boolValue1 = value1.asInstanceOf[Int] != 0
                     var boolValue2 = value2.asInstanceOf[Int] != 0
 
-                    print(if (boolValue1 || boolValue2) 1 else 0)
-                    print("\n")
                     (if (boolValue1 || boolValue2) 1 else 0 ,   Types.TYPE_INT)
                 }
 
@@ -255,7 +252,6 @@ package functions {
 
     class For(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
-            
             children(0).evaluate(symbol_table)
             var condition   = children(1)
             var increment   = children(2)
@@ -263,7 +259,7 @@ package functions {
 
             // Teste para o for, talvez de errado e tenha que usar breakble
             var (value, _type) = condition.evaluate(symbol_table)
-            var boolValue = value.asInstanceOf[Boolean]
+            var boolValue = value != 0
 
             while (boolValue) {
                 block.evaluate(symbol_table)
@@ -272,7 +268,7 @@ package functions {
                 var result = condition.evaluate(symbol_table)
                 value = result._1
 
-                boolValue = value.asInstanceOf[Boolean]
+                boolValue = value != 0
             }
 
             (Unit , Unit)

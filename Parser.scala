@@ -353,8 +353,6 @@ class Parser() {
 
   def parserStatement(tokenizer : Tokenizer) : Node = {
     
-    print(s" [STATEMENT] ${tokenizer.next._type} \n")
-
     if(tokenizer.next._type == Types.END_OF_LINE.toString) {
       tokenizer.selectNext()
       new NoOp("END_OF_LINE")
@@ -534,7 +532,6 @@ class Parser() {
       throw new InvalidExpression("\n Expected EOF type | Got " + tokenizer.next)
     }
 
-    print(" ============= Rornei o Nó =============\n")
     tree
   }
 
