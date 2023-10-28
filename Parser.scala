@@ -534,7 +534,7 @@ class Parser() {
       throw new InvalidExpression("\n Expected EOF type | Got " + tokenizer.next)
     }
 
-    print("Rornei o Nó\n")
+    print(" ============= Rornei o Nó =============\n")
     tree
   }
 

@@ -64,12 +64,18 @@ package binop {
                 }
 
                 case Types.OR => {
-
+                    print(" ==== OR EVALUATE ====\n")
                     if( !((type1 == type2) && (type1 == Types.TYPE_INT)) ){
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in OR operation : {$type1} || {$type2}")
                     }
 
-                    (if (value1.asInstanceOf[Boolean] || value2.asInstanceOf[Boolean]) 1 else 0 ,   Types.TYPE_INT)
+                    //(if (value1.asInstanceOf[Boolean] || value2.asInstanceOf[Boolean]) 1 else 0 ,   Types.TYPE_INT)
+                    var boolValue1 = value1.asInstanceOf[Int] != 0
+                    var boolValue2 = value2.asInstanceOf[Int] != 0
+
+                    print(if (boolValue1 || boolValue2) 1 else 0)
+                    print("\n")
+                    (if (boolValue1 || boolValue2) 1 else 0 ,   Types.TYPE_INT)
                 }
 
                 case Types.AND => {
@@ -77,16 +83,19 @@ package binop {
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in AND operation : {$type1} && {$type2}")
                     }
 
-                    (if (value1.asInstanceOf[Boolean] && value2.asInstanceOf[Boolean]) 1 else 0 ,   Types.TYPE_INT)
+                    var boolValue1 = value1.asInstanceOf[Int] != 0
+                    var boolValue2 = value2.asInstanceOf[Int] != 0
+
+                    //(if (value1.asInstanceOf[Boolean] && value2.asInstanceOf[Boolean]) 1 else 0 ,   Types.TYPE_INT)
+                    (if (boolValue1 && boolValue2) 1 else 0 ,   Types.TYPE_INT)
                 }
 
                 case Types.BIGGER_THEN => {
-
                     if(type1 != type2){
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in > operation : {$type1} > {$type2}")
                     }
 
-                    (if (value1.asInstanceOf[Boolean] > value2.asInstanceOf[Boolean]) 1 else 0 ,   Types.TYPE_INT)
+                    (if (value1.asInstanceOf[Int] > value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)
                 }
 
                 case Types.LESS_THAN => {
@@ -95,7 +104,7 @@ package binop {
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in < operation : {$type1} < {$type2}")
                     }
 
-                    (if (value1.asInstanceOf[Boolean] < value2.asInstanceOf[Boolean]) 1 else 0 ,   Types.TYPE_INT)
+                    (if (value1.asInstanceOf[Int] < value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)
                 }
 
                 case Types.EQUAL_COMP => {
@@ -153,7 +162,8 @@ package unop {
                 }
 
                 case Types.NOT => {
-                    (!value.asInstanceOf[Boolean] , _type.asInstanceOf[String])
+                    var boolValue = value.asInstanceOf[Int] != 0
+                    (if (boolValue) 0 else 1 ,   Types.TYPE_INT)
                 }
 
                 case _  => {throw new InvalidOperators(s" [UnOp - Evaluate] Invalid operator type = ${_value}")}
@@ -224,12 +234,13 @@ package functions {
 
     class If(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
+
             var conditional = children(0)
             var block_if    = children(1) 
-
+            
             var (value , _type) = conditional.evaluate(symbol_table)
-            var boolValue = value.asInstanceOf[Boolean]
-
+            var boolValue = value != 0
+            
             if(boolValue) {
                 block_if.evaluate(symbol_table)
             }else if(children.size > 2){
