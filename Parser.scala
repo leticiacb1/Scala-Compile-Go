@@ -40,7 +40,6 @@ class Parser() {
   }
 
   def parserFactor(tokenizer : Tokenizer) : Node = {
-
       if (tokenizer.next._type ==  Types.INT) {
         var node = new IntVal(tokenizer.next._value)
         
@@ -131,12 +130,11 @@ class Parser() {
       }
 
       else {
-        throw new InvalidExpression("\n [FACTOR] Unexpected value in factor | Got " + tokenizer.next)
+        throw new InvalidExpression("\n [FACTOR] UnexpeparserRlExpressioncted value in factor | Got " + tokenizer.next)
       }
     }
   
   def parserTerm(tokenizer : Tokenizer) : Node = {
-     
     var operators = List(Types.TIMES.toString , Types.BAR.toString )
     var left_node : Node = parserFactor(tokenizer)
 
@@ -366,8 +364,8 @@ class Parser() {
       if(tokenizer.next._type == Types.OPEN_PARENTHESES.toString){
         tokenizer.selectNext()
 
-        var expression = parserExpression(tokenizer)
-
+        var expression = parserBoolExpression(tokenizer)
+        
         var node_println = new Println(Types.PRINTLN)
         node_println.add_child(expression)
 
@@ -532,6 +530,7 @@ class Parser() {
       throw new InvalidExpression("\n Expected EOF type | Got " + tokenizer.next)
     }
 
+    print(" ===== RETURN NODE =====\n")
     tree
   }
 
