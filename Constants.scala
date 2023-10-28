@@ -27,6 +27,7 @@ object Types {
     val ELSE    = "else"
     val FOR     = "for"
     val SCANLN  = "Scanln"
+    val VAR     = "var"
 
     val EQUAL_COMP   = "=="
     val BIGGER_THEN  = '>'

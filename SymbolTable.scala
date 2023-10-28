@@ -12,26 +12,29 @@ class SymbolTable (){
 
     def getter(identifier : String): (Int, String) = {
         
-        var (value , _type) = 0 , "null"
+        var (value , _type) = (0 , "null")
 
-        if(table.get(identifier).isDefine){
-            (value , _type) = table.get(identifier)
+        if(table.get(identifier).isDefined){
+            var result = table.get(identifier)
+            value = result.get._1
+            _type = result.get._2
         }else{
-            throw new NonExistingKey(s"Chave não encontrada: $identifier"))
+            throw new NonExistingKey(s"Chave não encontrada: $identifier")
         }
         
         (value,_type)
     }
 
     def create(identifier : String , _type: String): Unit  ={
-        if(table.get(identifier).isDefine){
+        if(table.get(identifier).isDefined){
             throw new ExistingKey(s"Chave já existente : $identifier")
         }else{
-            table = table + (identifier -> (null , _type)) 
+            table = table + (identifier -> (0 , _type)) 
         }
     }
 
     def setter(identifier : String, value : Int) : Unit = {
-        table = table + (identifier -> (value, table.get(identifier)[1])
+        var _type = table.get(identifier).get._2
+        table = table + (identifier -> (value, _type))
     }
 }

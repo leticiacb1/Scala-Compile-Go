@@ -9,6 +9,8 @@ import binop._
 import unop._
 import noop._
 import intval._
+import strval._
+import vardec._
 import block._
 import assigment._
 import functions._
@@ -351,6 +353,8 @@ class Parser() {
 
   def parserStatement(tokenizer : Tokenizer) : Node = {
     
+    print(s" [STATEMENT] ${tokenizer.next._type} \n")
+
     if(tokenizer.next._type == Types.END_OF_LINE.toString) {
       tokenizer.selectNext()
       new NoOp("END_OF_LINE")
@@ -366,7 +370,7 @@ class Parser() {
 
         var expression = parserExpression(tokenizer)
 
-        var node_println = new Println(Values.PRINTLN)
+        var node_println = new Println(Types.PRINTLN)
         node_println.add_child(expression)
 
         if(tokenizer.next._type != Types.CLOSE_PARENTHESES.toString){
@@ -441,9 +445,9 @@ class Parser() {
           var_dec.add_child(node_identifier)
 
           tokenizer.selectNext()
-          if(tokenizer.next._type == Types.EQUAL) {
+          if(tokenizer.next._type == Types.EQUAL.toString) {
             tokenizer.selectNext()
-            var bool_expression = parserBoolExpression()
+            var bool_expression = parserBoolExpression(tokenizer)
             var_dec.add_child(bool_expression)
           }
 
@@ -500,6 +504,8 @@ class Parser() {
           break;
         }else{
           var statement = parserStatement(tokenizer)
+          
+          print(s" [PROGRAM] ${statement} \n")
 
           if(tokenizer.next._type == Types.END_OF_LINE.toString){
             tokenizer.selectNext()
@@ -512,7 +518,6 @@ class Parser() {
       }
     }
 
-    // TEM ?
     tokenizer.selectNext()
     node_program
 
@@ -529,6 +534,7 @@ class Parser() {
       throw new InvalidExpression("\n Expected EOF type | Got " + tokenizer.next)
     }
 
+    print("Rornei o Nó\n")
     tree
   }
 

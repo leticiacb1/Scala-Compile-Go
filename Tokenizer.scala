@@ -132,7 +132,7 @@ class Tokenizer ( _source : String){
                     }
 
                     case Types.CONCAT => {
-                        next = new Token(_type = Types.CONCAT , _value =Values.CONCAT)
+                        next = new Token(_type = Types.CONCAT.toString , _value =Values.CONCAT)
                         position += 1
                         break;
                     }
