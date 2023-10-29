@@ -174,7 +174,6 @@ class Tokenizer ( _source : String){
                     }
 
                     case Types.QUOTATION_MARKS => {
-                        print(" ===== TOKENIZER STRING =======\n")
                         var value_str : String = ""
                         position += 1
 
@@ -182,7 +181,6 @@ class Tokenizer ( _source : String){
                             value_str += source.charAt(position)
                             position += 1
                         }
-                        print(value_str + "\n")
                         position += 1
                         next = new Token(_type = Types.VARIABLE_STR , _value = value_str)
                         break;

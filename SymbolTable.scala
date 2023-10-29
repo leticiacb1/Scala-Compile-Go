@@ -15,7 +15,6 @@ class SymbolTable (){
         var _type : String  = ""
 
         if(table.get(identifier).isDefined){
-            print(f" A chave $identifier esta definida\n")
             var result = table.get(identifier)
             value = result.get._1
             _type = result.get._2
@@ -30,7 +29,6 @@ class SymbolTable (){
         if(table.get(identifier).isDefined){
             throw new ExistingKey(s"Chave já existente : $identifier")
         }else{
-            print(s" Seta o valor do identifier : $identifier com tipo : ${_type}")
             table = table + (identifier -> (0 , _type)) 
         }
     }

@@ -298,7 +298,13 @@ package identifier {
     class Identifier(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : (Any , String) =  { 
             var (value , _type) = symbol_table.getter(_value.toString)
-            (value.asInstanceOf[Int], _type.asInstanceOf[String])
+
+            if(_type == Types.TYPE_STR){
+                (value.asInstanceOf[String], _type.asInstanceOf[String])
+            }else{
+                (value.asInstanceOf[Int], _type.asInstanceOf[String])
+            }
+            
         }
     }
 }
