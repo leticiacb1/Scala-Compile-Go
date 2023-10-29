@@ -91,8 +91,12 @@ package binop {
                     if(type1 != type2){
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in > operation : {$type1} > {$type2}")
                     }
-
-                    (if (value1.asInstanceOf[Int] > value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)
+                    
+                    if(type1 == Types.TYPE_INT){
+                        (if (value1.asInstanceOf[Int] > value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)        
+                    }else{
+                        (if (value1.asInstanceOf[String] > value2.asInstanceOf[String]) 1 else 0 ,   Types.TYPE_INT)
+                    }
                 }
 
                 case Types.LESS_THAN => {
@@ -100,8 +104,12 @@ package binop {
                     if(type1 != type2){
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in < operation : {$type1} < {$type2}")
                     }
-
-                    (if (value1.asInstanceOf[Int] < value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)
+                    
+                    if(type1 == Types.TYPE_INT){
+                        (if (value1.asInstanceOf[Int] < value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)
+                    }else{
+                        (if (value1.asInstanceOf[String] < value2.asInstanceOf[String]) 1 else 0 ,   Types.TYPE_INT)
+                    }
                 }
 
                 case Types.EQUAL_COMP => {
