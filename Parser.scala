@@ -499,8 +499,6 @@ class Parser() {
         }else{
           var statement = parserStatement(tokenizer)
           
-          print(s" [PROGRAM] ${statement} \n")
-
           if(tokenizer.next._type == Types.END_OF_LINE.toString){
             tokenizer.selectNext()
           }else{
@@ -528,7 +526,6 @@ class Parser() {
       throw new InvalidExpression("\n Expected EOF type | Got " + tokenizer.next)
     }
 
-    print(" ===== RETURN NODE =====\n")
     tree
   }
 
