@@ -2,11 +2,13 @@ import constants._
 import table.SymbolTable
 import constants._
 import errors._
+import assembler.Assembler
 
 package node {
     abstract class Node (val _value : Any){
         
         var children : List[Node] = Nil
+        var asm = Assembler()
 
         def add_child(child : Node) : Unit = {
             children = children :+ child
@@ -27,14 +29,26 @@ package binop {
         def evaluate(symbol_table: SymbolTable) : (Any , String) =  { 
             
             var (value1 , type1) = children(0).evaluate(symbol_table)
+            asm.body +=  """
+                        PUSH EAX
+                         """
             var (value2 , type2) = children(1).evaluate(symbol_table)
-            
+            asm.body +=  """
+                        POP EBX
+                         """
+
             _value match {
 
                 case Types.PLUS => {
                     if( !((type1 == type2) && (type1 == Types.TYPE_INT)) ){
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in + operation : {$type1} + {$type2}")
                     }
+
+                    var instruction = s"""
+                        ; Binop(${value1} + ${value2})
+                        ADD EAX , EBX\n
+                    """
+                    asm.body += instruction
 
                     ((value1.asInstanceOf[Int] + value2.asInstanceOf[Int]) , Types.TYPE_INT)  
                 }
@@ -44,6 +58,12 @@ package binop {
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in - operation : {$type1} - {$type2}")
                     }
 
+                    var instruction = s"""
+                        ; Binop(${value1} - ${value2})
+                        SUB EAX , EBX\n
+                    """
+                    asm.body += instruction
+
                     ((value1.asInstanceOf[Int] - value2.asInstanceOf[Int]) , Types.TYPE_INT)
                 } 
 
@@ -51,6 +71,12 @@ package binop {
                     if( !((type1 == type2) && (type1 == Types.TYPE_INT)) ){
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in / operation : {$type1} / {$type2}")
                     }
+
+                    var instruction = s"""
+                        ; Binop(${value1} / ${value2})
+                        IDIV EBX\n
+                    """
+                    asm.body += instruction
 
                     (value1.asInstanceOf[Int]/value2.asInstanceOf[Int] , Types.TYPE_INT)
                 }
@@ -60,7 +86,13 @@ package binop {
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in * operation : {$type1} * {$type2}")
                     }
 
-                   (value1.asInstanceOf[Int]*value2.asInstanceOf[Int] , Types.TYPE_INT)
+                    var instruction = s"""
+                        ; Binop(${value1} * ${value2})
+                        IMUL EAX , EBX\n
+                    """
+                    asm.body += instruction
+
+                    (value1.asInstanceOf[Int]*value2.asInstanceOf[Int] , Types.TYPE_INT)
                 }
 
                 case Types.OR => {
@@ -68,9 +100,14 @@ package binop {
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in OR operation : {$type1} || {$type2}")
                     }
 
-                    //(if (value1.asInstanceOf[Boolean] || value2.asInstanceOf[Boolean]) 1 else 0 ,   Types.TYPE_INT)
                     var boolValue1 = value1.asInstanceOf[Int] != 0
                     var boolValue2 = value2.asInstanceOf[Int] != 0
+                    
+                    var instruction = s"""
+                        ; Binop(${value1} || ${value2})
+                        OR EAX , EBX\n
+                    """
+                    asm.body += instruction
 
                     (if (boolValue1 || boolValue2) 1 else 0 ,   Types.TYPE_INT)
                 }
@@ -83,7 +120,12 @@ package binop {
                     var boolValue1 = value1.asInstanceOf[Int] != 0
                     var boolValue2 = value2.asInstanceOf[Int] != 0
 
-                    //(if (value1.asInstanceOf[Boolean] && value2.asInstanceOf[Boolean]) 1 else 0 ,   Types.TYPE_INT)
+                    var instruction = s"""
+                        ; Binop(${value1} && ${value2})
+                        AND EAX , EBX\n
+                    """
+                    asm.body += instruction
+
                     (if (boolValue1 && boolValue2) 1 else 0 ,   Types.TYPE_INT)
                 }
 
@@ -91,6 +133,13 @@ package binop {
                     if(type1 != type2){
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in > operation : {$type1} > {$type2}")
                     }
+
+                    var instruction = s"""
+                        ; Binop(${value1} > ${value2})
+                        CMP EAX, EBX  
+                        CALL binop_jg  \n
+                    """
+                    asm.body += instruction
                     
                     if(type1 == Types.TYPE_INT){
                         (if (value1.asInstanceOf[Int] > value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)        
@@ -104,6 +153,13 @@ package binop {
                     if(type1 != type2){
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in < operation : {$type1} < {$type2}")
                     }
+
+                    var instruction = s"""
+                        ; Binop(${value1} < ${value2})
+                        CMP EAX, EBX  
+                        CALL binop_jl  \n
+                    """
+                    asm.body += instruction
                     
                     if(type1 == Types.TYPE_INT){
                         (if (value1.asInstanceOf[Int] < value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)
@@ -116,6 +172,13 @@ package binop {
                     if(type1 != type2){
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in == operation : {$type1} == {$type2}")
                     }
+
+                    var instruction = s"""
+                        ; Binop(${value1} == ${value2})
+                        CMP EAX, EBX  
+                        CALL binop_je  \n
+                    """
+                    asm.body += instruction
 
                     (if (value1 == value2) 1 else 0 ,   Types.TYPE_INT)
                 }

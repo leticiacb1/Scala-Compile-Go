@@ -3,6 +3,7 @@ import scala.io.Source
 import prepro._
 import table.SymbolTable
 import constants._
+import assembler.Assembler
 
 object Main {
 
@@ -30,5 +31,7 @@ object Main {
 
     var symbol_table = new SymbolTable()
     tree.evaluate(symbol_table)
+
+    Assembler().mount(fileName)
   }
 }
