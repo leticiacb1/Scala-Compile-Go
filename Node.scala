@@ -198,6 +198,12 @@ package intval {
     import node._
     class IntVal(_value : Any) extends Node (_value){
         def evaluate(symbol_table: SymbolTable) : (Any, String) =  { 
+            var instruction = s"""
+                        ; Intval(value = ${_value})
+                        MOV EAX , {_value} \n
+                """
+            asm.body += instruction
+        
             ( _value.asInstanceOf[Int] , Types.TYPE_INT )
         }
     }
