@@ -224,19 +224,39 @@ package unop {
         def evaluate(symbol_table: SymbolTable) : (Any, String) =  { 
             
             var (value , _type) = children(0).evaluate(symbol_table)
-            
+
             _value match {
 
                 case Types.PLUS => {
+                    var instruction = s"""
+                        ; UnOp(value = ${_value})
+                        MOV EAX , ${_value} \n
+                    """
+                    asm.body += instruction
+
                     ((1)*value.asInstanceOf[Int] , _type.asInstanceOf[String])
                 }
 
                 case Types.MINUS => {
+                    var instruction = s"""
+                        ; UnOp(value = ${_value})
+                        NEG EAX  \n
+                    """
+                    asm.body += instruction
+
                     ((-1)*value.asInstanceOf[Int] , _type.asInstanceOf[String])
                 }
 
                 case Types.NOT => {
+
                     var boolValue = value.asInstanceOf[Int] != 0
+                    
+                    var instruction = s"""
+                        ; UnOp(value = ${_value})
+                        MOV EAX  , ${if (boolValue) 0 else 1} \n
+                    """
+                    asm.body += instruction
+
                     (if (boolValue) 0 else 1 ,   Types.TYPE_INT)
                 }
 
