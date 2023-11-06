@@ -4,9 +4,6 @@ import prepro._
 import table.SymbolTable
 import constants._
 
-// Para passar o conteudo do arquivo para o programa rodar:
-// scala Main < meuarquivo.go
-
 object Main {
 
   def load_file(fileName: String) : List[String] = {
