@@ -458,6 +458,17 @@ package functions {
             if(!number.forall(_.isDigit)){
                 throw new InvalidType(f" [SCANLN - EVALUATE] Only the integer type is accepted in the Scanln function. Tried type: ${number.getClass.getSimpleName}")
             }
+            
+            var instruction = s"""
+                ; Scanln
+                PUSH scanint
+                PUSH formatin
+                CALL scanf
+                ADD ESP , 8 
+                MOV EAX , DWORD [scanint]
+                MOV [EBP - 4] , EAX \n
+            """
+            asm.body += instruction
 
             (number.toInt , Types.TYPE_INT)
         }
