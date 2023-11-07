@@ -79,7 +79,8 @@ class Assembler() {
         try{
             writeFile(fileName, content)
         } catch {
-            case e : Exception => None
+            case e : Exception => 
+                 println("\n [WRITE ASM FILE] Fail to write file | " + e.getMessage)
         }
     }
 
