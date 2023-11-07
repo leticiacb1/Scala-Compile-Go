@@ -3,11 +3,16 @@ import table.SymbolTable
 import constants._
 import errors._
 import assembler.Assembler
+import counter.IdCounter
 
 package node {
     abstract class Node (val _value : Any){
         
         var children : List[Node] = Nil
+        
+        var id  = IdCounter().counter
+        IdCounter().counter += 1
+
         var asm = Assembler()
 
         def add_child(child : Node) : Unit = {
@@ -349,20 +354,49 @@ package functions {
 
     class If(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
-
+            
+            var instruction : String = ""
+            
             var conditional = children(0)
             var block_if    = children(1) 
             
             var (value , _type) = conditional.evaluate(symbol_table)
-            var boolValue = value != 0
+           
+            instruction = s"""
+            IF_${id}: 
+                CMP EAX , False 
+                JMP ELSE_${id}
+            """
+            asm.body += instruction
             
-            if(boolValue) {
-                block_if.evaluate(symbol_table)
-            }else if(children.size > 2){
-                if(!(boolValue)){
-                    children(2).evaluate(symbol_table)
-                }
+            //Bloco If
+            block_if.evaluate(symbol_table)
+            asm.body += s"""
+                JMP EXIT_IF_${id}
+            """
+
+            // Bloco Else
+            asm.body += s"""
+            ELSE_${id}:
+            """
+
+            if(children.size > 2){
+                children(2).evaluate(symbol_table)
             }
+
+            //Fim
+            asm.body += s"""
+            EXIT_IF_${id}: \n
+            """
+            
+            //var boolValue = value != 0
+            // if(boolValue) {
+            //     block_if.evaluate(symbol_table)
+            // }else if(children.size > 2){
+            //     if(!(boolValue)){
+            //         children(2).evaluate(symbol_table)
+            //     }
+            // }
 
             (Unit , Unit)
         }
