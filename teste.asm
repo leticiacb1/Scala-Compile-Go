@@ -219,5 +219,5 @@
                 POP EBP
                 MOV EAX, 1
                 XOR EBX, EBX
-                INT 0x80\n
+                INT 0x80
     
