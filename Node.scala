@@ -34,9 +34,9 @@ package binop {
 
         def evaluate(symbol_table: SymbolTable) : (Any , String) =  { 
             
-            var (value1 , type1) = children(0).evaluate(symbol_table)
-            asm.appendToBody(s"""PUSH EAX\n\n""")
             var (value2 , type2) = children(1).evaluate(symbol_table)
+            asm.appendToBody(s"""PUSH EAX\n\n""")
+            var (value1 , type1) = children(0).evaluate(symbol_table)
             asm.appendToBody(s"""POP EBX\n\n""")
 
             _value match {

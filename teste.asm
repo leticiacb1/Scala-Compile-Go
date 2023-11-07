@@ -51,13 +51,13 @@
 				; Vardec(identifier = y)
 				PUSH DWORD 0 
 
-				; Intval(value = 3)
-				MOV EAX , 3 
+				; Intval(value = 1)
+				MOV EAX , 1 
 
 				PUSH EAX
 
-				; Intval(value = 1)
-				MOV EAX , 1 
+				; Intval(value = 3)
+				MOV EAX , 3 
 
 				POP EBX
 
@@ -73,13 +73,13 @@
 				; Assigment(identifier = y , value = 4)
 				MOV[EBP - 8], EAX 
 
-				; Identifier(value = x)
-				MOV EAX , [EBP - 4]
+				; Intval(value = 1)
+				MOV EAX , 1 
 
 				PUSH EAX
 
-				; Intval(value = 1)
-				MOV EAX , 1 
+				; Identifier(value = x)
+				MOV EAX , [EBP - 4]
 
 				POP EBX
 
@@ -91,13 +91,13 @@
 				CMP EAX , False 
 				JMP ELSE_23
 
-				; Intval(value = 5)
-				MOV EAX , 5 
+				; Intval(value = 1)
+				MOV EAX , 1 
 
 				PUSH EAX
 
-				; Intval(value = 1)
-				MOV EAX , 1 
+				; Intval(value = 5)
+				MOV EAX , 5 
 
 				POP EBX
 
@@ -113,13 +113,13 @@
 
 			EXIT_IF_23: 
 
-				; Identifier(value = x)
-				MOV EAX , [EBP - 4]
+				; Intval(value = 3)
+				MOV EAX , 3 
 
 				PUSH EAX
 
-				; Intval(value = 3)
-				MOV EAX , 3 
+				; Identifier(value = x)
+				MOV EAX , [EBP - 4]
 
 				POP EBX
 
@@ -150,13 +150,13 @@
 				MOV[EBP - 4], EAX 
 
 			LOOP_52:
-				; Identifier(value = x)
-				MOV EAX , [EBP - 4]
+				; Intval(value = 5)
+				MOV EAX , 5 
 
 				PUSH EAX
 
-				; Intval(value = 5)
-				MOV EAX , 5 
+				; Identifier(value = x)
+				MOV EAX , [EBP - 4]
 
 				POP EBX
 
@@ -166,13 +166,13 @@
 
 				CMP EAX , False
 				JE EXIT_LOOP_52
-				; Identifier(value = x)
-				MOV EAX , [EBP - 4]
+				; Intval(value = 1)
+				MOV EAX , 1 
 
 				PUSH EAX
 
-				; Intval(value = 1)
-				MOV EAX , 1 
+				; Identifier(value = x)
+				MOV EAX , [EBP - 4]
 
 				POP EBX
 
@@ -182,13 +182,13 @@
 				; Assigment(identifier = y , value = 2)
 				MOV[EBP - 8], EAX 
 
-				; Identifier(value = x)
-				MOV EAX , [EBP - 4]
+				; Intval(value = 1)
+				MOV EAX , 1 
 
 				PUSH EAX
 
-				; Intval(value = 1)
-				MOV EAX , 1 
+				; Identifier(value = x)
+				MOV EAX , [EBP - 4]
 
 				POP EBX
 
