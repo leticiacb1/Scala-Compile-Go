@@ -52,30 +52,38 @@
 				PUSH DWORD 0 
 
 				; Intval(value = 3)
-				MOV EAX , {_value} 
+				MOV EAX , 3 
 
-				PUSH EAX\n\n				; Intval(value = 1)
-				MOV EAX , {_value} 
+				PUSH EAX
 
-				POP EBX\n\n				; Binop(3 + 1)
+				; Intval(value = 1)
+				MOV EAX , 1 
+
+				POP EBX
+
+				; Binop(3 + 1)
 				ADD EAX , EBX
 
-				; Assigment(identifier = = , value = 4)
+				; Assigment(identifier = x , value = 4)
 				MOV[EBP - 4], EAX 
 
 				; Identifier(value = x)
 				MOV EAX , [EBP - 4]
 
-				; Assigment(identifier = = , value = 4)
+				; Assigment(identifier = y , value = 4)
 				MOV[EBP - 8], EAX 
 
 				; Identifier(value = x)
 				MOV EAX , [EBP - 4]
 
-				PUSH EAX\n\n				; Intval(value = 1)
-				MOV EAX , {_value} 
+				PUSH EAX
 
-				POP EBX\n\n				; Binop(4 > 1)
+				; Intval(value = 1)
+				MOV EAX , 1 
+
+				POP EBX
+
+				; Binop(4 > 1)
 				CMP EAX, EBX 
 				CALL binop_jg  
 
@@ -84,15 +92,19 @@
 				JMP ELSE_23
 
 				; Intval(value = 5)
-				MOV EAX , {_value} 
+				MOV EAX , 5 
 
-				PUSH EAX\n\n				; Intval(value = 1)
-				MOV EAX , {_value} 
+				PUSH EAX
 
-				POP EBX\n\n				; Binop(5 - 1)
+				; Intval(value = 1)
+				MOV EAX , 1 
+
+				POP EBX
+
+				; Binop(5 - 1)
 				SUB EAX , EBX
 
-				; Assigment(identifier = = , value = 4)
+				; Assigment(identifier = x , value = 4)
 				MOV[EBP - 4], EAX 
 
 				JMP EXIT_IF_23
@@ -104,10 +116,14 @@
 				; Identifier(value = x)
 				MOV EAX , [EBP - 4]
 
-				PUSH EAX\n\n				; Intval(value = 3)
-				MOV EAX , {_value} 
+				PUSH EAX
 
-				POP EBX\n\n				; Binop(4 == 3)
+				; Intval(value = 3)
+				MOV EAX , 3 
+
+				POP EBX
+
+				; Binop(4 == 3)
 				CMP EAX, EBX 
 				CALL binop_je  
 
@@ -120,27 +136,31 @@
 			ELSE_28:
 
 				; Intval(value = 3)
-				MOV EAX , {_value} 
+				MOV EAX , 3 
 
-				; Assigment(identifier = = , value = 3)
+				; Assigment(identifier = x , value = 3)
 				MOV[EBP - 4], EAX 
 
 			EXIT_IF_28: 
 
 				; Intval(value = 3)
-				MOV EAX , {_value} 
+				MOV EAX , 3 
 
-				; Assigment(identifier = = , value = 3)
+				; Assigment(identifier = x , value = 3)
 				MOV[EBP - 4], EAX 
 
 			LOOP_52:
 				; Identifier(value = x)
 				MOV EAX , [EBP - 4]
 
-				PUSH EAX\n\n				; Intval(value = 5)
-				MOV EAX , {_value} 
+				PUSH EAX
 
-				POP EBX\n\n				; Binop(3 < 5)
+				; Intval(value = 5)
+				MOV EAX , 5 
+
+				POP EBX
+
+				; Binop(3 < 5)
 				CMP EAX, EBX 
 				CALL binop_jl  
 
@@ -149,25 +169,33 @@
 				; Identifier(value = x)
 				MOV EAX , [EBP - 4]
 
-				PUSH EAX\n\n				; Intval(value = 1)
-				MOV EAX , {_value} 
+				PUSH EAX
 
-				POP EBX\n\n				; Binop(3 - 1)
+				; Intval(value = 1)
+				MOV EAX , 1 
+
+				POP EBX
+
+				; Binop(3 - 1)
 				SUB EAX , EBX
 
-				; Assigment(identifier = = , value = 2)
+				; Assigment(identifier = y , value = 2)
 				MOV[EBP - 8], EAX 
 
 				; Identifier(value = x)
 				MOV EAX , [EBP - 4]
 
-				PUSH EAX\n\n				; Intval(value = 1)
-				MOV EAX , {_value} 
+				PUSH EAX
 
-				POP EBX\n\n				; Binop(3 + 1)
+				; Intval(value = 1)
+				MOV EAX , 1 
+
+				POP EBX
+
+				; Binop(3 + 1)
 				ADD EAX , EBX
 
-				; Assigment(identifier = = , value = 4)
+				; Assigment(identifier = x , value = 4)
 				MOV[EBP - 4], EAX 
 
 				JMP LOOP_52

@@ -35,9 +35,9 @@ package binop {
         def evaluate(symbol_table: SymbolTable) : (Any , String) =  { 
             
             var (value1 , type1) = children(0).evaluate(symbol_table)
-            asm.appendToBody("""PUSH EAX\n\n""")
+            asm.appendToBody(s"""PUSH EAX\n\n""")
             var (value2 , type2) = children(1).evaluate(symbol_table)
-            asm.appendToBody("""POP EBX\n\n""")
+            asm.appendToBody(s"""POP EBX\n\n""")
 
             _value match {
 
@@ -175,7 +175,7 @@ package intval {
         def evaluate(symbol_table: SymbolTable) : (Any, String) =  { 
 
             asm.appendToBody(s"""; Intval(value = ${_value})\n""")
-            asm.appendToBody(s"""MOV EAX , {_value} \n\n""")
+            asm.appendToBody(s"""MOV EAX , ${_value} \n\n""")
         
             ( _value.asInstanceOf[Int] , Types.TYPE_INT )
         }
@@ -278,7 +278,7 @@ package assigment {
 
             if(type1 == Types.TYPE_INT){
  
-                asm.appendToBody(s"""; Assigment(identifier = ${_value} , value = ${result_expression})\n""")
+                asm.appendToBody(s"""; Assigment(identifier = ${children(0)._value} , value = ${result_expression})\n""")
                 asm.appendToBody(s"""MOV[EBP - ${position}], EAX \n\n""")
 
                 symbol_table.setter(children(0)._value.asInstanceOf[String] , result_expression.asInstanceOf[Int])
