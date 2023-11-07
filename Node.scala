@@ -35,13 +35,9 @@ package binop {
         def evaluate(symbol_table: SymbolTable) : (Any , String) =  { 
             
             var (value1 , type1) = children(0).evaluate(symbol_table)
-            asm.appendToBody("""
-                        PUSH EAX
-                         """)
+            asm.appendToBody("""PUSH EAX\n\n""")
             var (value2 , type2) = children(1).evaluate(symbol_table)
-            asm.appendToBody("""
-                        POP EBX
-                         """)
+            asm.appendToBody("""POP EBX\n\n""")
 
             _value match {
 
@@ -49,13 +45,10 @@ package binop {
                     if( !((type1 == type2) && (type1 == Types.TYPE_INT)) ){
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in + operation : {$type1} + {$type2}")
                     }
-
-                    var instruction = s"""
-                        ; Binop(${value1} + ${value2})
-                        ADD EAX , EBX\n
-                    """
-                    asm.appendToBody(instruction)
-
+                    
+                    asm.appendToBody(s"""; Binop(${value1} + ${value2})\n""")
+                    asm.appendToBody(s"""ADD EAX , EBX\n\n""")
+                    
                     ((value1.asInstanceOf[Int] + value2.asInstanceOf[Int]) , Types.TYPE_INT)  
                 }
 
@@ -64,11 +57,8 @@ package binop {
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in - operation : {$type1} - {$type2}")
                     }
 
-                    var instruction = s"""
-                        ; Binop(${value1} - ${value2})
-                        SUB EAX , EBX\n
-                    """
-                    asm.appendToBody(instruction)
+                    asm.appendToBody(s"""; Binop(${value1} - ${value2})\n""")
+                    asm.appendToBody(s"""SUB EAX , EBX\n\n""")
 
                     ((value1.asInstanceOf[Int] - value2.asInstanceOf[Int]) , Types.TYPE_INT)
                 } 
@@ -78,11 +68,8 @@ package binop {
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in / operation : {$type1} / {$type2}")
                     }
 
-                    var instruction = s"""
-                        ; Binop(${value1} / ${value2})
-                        IDIV EBX\n
-                    """
-                    asm.appendToBody(instruction)
+                    asm.appendToBody(s"""; Binop(${value1} / ${value2})\n""")
+                    asm.appendToBody(s"""IDIV EBX\n\n""")
 
                     (value1.asInstanceOf[Int]/value2.asInstanceOf[Int] , Types.TYPE_INT)
                 }
@@ -92,11 +79,8 @@ package binop {
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in * operation : {$type1} * {$type2}")
                     }
 
-                    var instruction = s"""
-                        ; Binop(${value1} * ${value2})
-                        IMUL EAX , EBX\n
-                    """
-                    asm.appendToBody(instruction)
+                    asm.appendToBody(s"""; Binop(${value1} * ${value2})\n""")
+                    asm.appendToBody(s"""IMUL EAX , EBX\n\n""")
 
                     (value1.asInstanceOf[Int]*value2.asInstanceOf[Int] , Types.TYPE_INT)
                 }
@@ -108,12 +92,9 @@ package binop {
 
                     var boolValue1 = value1.asInstanceOf[Int] != 0
                     var boolValue2 = value2.asInstanceOf[Int] != 0
-                    
-                    var instruction = s"""
-                        ; Binop(${value1} || ${value2})
-                        OR EAX , EBX\n
-                    """
-                    asm.appendToBody(instruction)
+                 
+                    asm.appendToBody(s"""; Binop(${value1} || ${value2})\n""")
+                    asm.appendToBody(s"""OR EAX , EBX\n\n""")
 
                     (if (boolValue1 || boolValue2) 1 else 0 ,   Types.TYPE_INT)
                 }
@@ -126,11 +107,8 @@ package binop {
                     var boolValue1 = value1.asInstanceOf[Int] != 0
                     var boolValue2 = value2.asInstanceOf[Int] != 0
 
-                    var instruction = s"""
-                        ; Binop(${value1} && ${value2})
-                        AND EAX , EBX\n
-                    """
-                    asm.appendToBody(instruction)
+                    asm.appendToBody(s"""; Binop(${value1} && ${value2})\n""")
+                    asm.appendToBody(s"""AND EAX , EBX\n\n""")
 
                     (if (boolValue1 && boolValue2) 1 else 0 ,   Types.TYPE_INT)
                 }
@@ -140,12 +118,9 @@ package binop {
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in > operation : {$type1} > {$type2}")
                     }
 
-                    var instruction = s"""
-                        ; Binop(${value1} > ${value2})
-                        CMP EAX, EBX  
-                        CALL binop_jg  \n
-                    """
-                    asm.appendToBody(instruction)
+                    asm.appendToBody(s"""; Binop(${value1} > ${value2})\n""")
+                    asm.appendToBody(s"""CMP EAX, EBX \n""")
+                    asm.appendToBody(s"""CALL binop_jg  \n\n""")
                     
                     if(type1 == Types.TYPE_INT){
                         (if (value1.asInstanceOf[Int] > value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)        
@@ -160,12 +135,9 @@ package binop {
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in < operation : {$type1} < {$type2}")
                     }
 
-                    var instruction = s"""
-                        ; Binop(${value1} < ${value2})
-                        CMP EAX, EBX  
-                        CALL binop_jl  \n
-                    """
-                    asm.appendToBody(instruction)
+                    asm.appendToBody(s"""; Binop(${value1} < ${value2})\n""")
+                    asm.appendToBody(s"""CMP EAX, EBX \n""")
+                    asm.appendToBody(s"""CALL binop_jl  \n\n""")
                     
                     if(type1 == Types.TYPE_INT){
                         (if (value1.asInstanceOf[Int] < value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)
@@ -179,12 +151,9 @@ package binop {
                         throw new IncompatibleTypes(s" [Binop - Evaluate] Incompatible Types find in == operation : {$type1} == {$type2}")
                     }
 
-                    var instruction = s"""
-                        ; Binop(${value1} == ${value2})
-                        CMP EAX, EBX  
-                        CALL binop_je  \n
-                    """
-                    asm.appendToBody(instruction)
+                    asm.appendToBody(s"""; Binop(${value1} == ${value2})\n""")
+                    asm.appendToBody(s"""CMP EAX, EBX \n""")
+                    asm.appendToBody(s"""CALL binop_je  \n\n""")
 
                     (if (value1 == value2) 1 else 0 ,   Types.TYPE_INT)
                 }
@@ -204,11 +173,9 @@ package intval {
     import node._
     class IntVal(_value : Any) extends Node (_value){
         def evaluate(symbol_table: SymbolTable) : (Any, String) =  { 
-            var instruction = s"""
-                        ; Intval(value = ${_value})
-                        MOV EAX , {_value} \n
-                """
-            asm.appendToBody(instruction)
+
+            asm.appendToBody(s"""; Intval(value = ${_value})\n""")
+            asm.appendToBody(s"""MOV EAX , {_value} \n\n""")
         
             ( _value.asInstanceOf[Int] , Types.TYPE_INT )
         }
@@ -234,21 +201,17 @@ package unop {
             _value match {
 
                 case Types.PLUS => {
-                    var instruction = s"""
-                        ; UnOp(value = ${_value})
-                        MOV EAX , ${_value} \n
-                    """
-                    asm.appendToBody(instruction)
+
+                    asm.appendToBody(s"""; UnOp(value = ${_value})\n""")
+                    asm.appendToBody(s"""MOV EAX , ${_value} \n\n""")
 
                     ((1)*value.asInstanceOf[Int] , _type.asInstanceOf[String])
                 }
 
                 case Types.MINUS => {
-                    var instruction = s"""
-                        ; UnOp(value = ${_value})
-                        NEG EAX  \n
-                    """
-                    asm.appendToBody(instruction)
+
+                    asm.appendToBody(s"""; UnOp(value = ${_value})\n""")
+                    asm.appendToBody(s"""NEG EAX  \n\n""")
 
                     ((-1)*value.asInstanceOf[Int] , _type.asInstanceOf[String])
                 }
@@ -257,11 +220,8 @@ package unop {
 
                     var boolValue = value.asInstanceOf[Int] != 0
                     
-                    var instruction = s"""
-                        ; UnOp(value = ${_value})
-                        MOV EAX  , ${if (boolValue) 0 else 1} \n
-                    """
-                    asm.appendToBody(instruction)
+                    asm.appendToBody(s"""; UnOp(value = ${_value})\n""")
+                    asm.appendToBody(s"""MOV EAX  , ${if (boolValue) 0 else 1} \n\n""")
 
                     (if (boolValue) 0 else 1 ,   Types.TYPE_INT)
                 }
@@ -317,11 +277,9 @@ package assigment {
             }
 
             if(type1 == Types.TYPE_INT){
-                var instruction = s"""
-                        ; Assigment(identifier = ${_value} , value = ${result_expression})
-                        MOV[EBP - ${position}], EAX \n
-                    """
-                asm.appendToBody(instruction)
+ 
+                asm.appendToBody(s"""; Assigment(identifier = ${_value} , value = ${result_expression})\n""")
+                asm.appendToBody(s"""MOV[EBP - ${position}], EAX \n\n""")
 
                 symbol_table.setter(children(0)._value.asInstanceOf[String] , result_expression.asInstanceOf[Int])
             }else{
@@ -339,14 +297,12 @@ package functions {
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
             var (expression_result , _type) = children(0).evaluate(symbol_table)
             
-            var instruction = s"""
-                ; Println
-                PUSH EAX 
-                PUSH formatout 
-                CALL printf 
-                ADD ESP , 8\n
-            """
-            asm.appendToBody(instruction)
+            asm.appendToBody(s"""; Println\n""")
+            asm.appendToBody(s"""PUSH EAX\n""")
+            asm.appendToBody(s"""PUSH formatout\n""")
+            asm.appendToBody(s"""CALL printf\n""")
+            asm.appendToBody(s"""ADD ESP , 8\n\n""")
+
             println(expression_result)
             (Unit , Unit)
         }
@@ -362,41 +318,23 @@ package functions {
             
             var (value , _type) = conditional.evaluate(symbol_table)
             
-            instruction = s"""
-            IF_${id}: 
-                CMP EAX , False 
-                JMP ELSE_${id}
-            """
-            asm.appendToBody(instruction)
+            asm.appendToBody(s"""IF_${id}:\n""")
+            asm.appendToBody(s"""CMP EAX , False \n""")
+            asm.appendToBody(s"""JMP ELSE_${id}\n\n""")
             
             //Bloco If
             block_if.evaluate(symbol_table)
-            asm.appendToBody(s"""
-                JMP EXIT_IF_${id}
-            """)
+            asm.appendToBody(s"""JMP EXIT_IF_${id}\n\n""")
 
             // Bloco Else
-            asm.appendToBody(s"""
-            ELSE_${id}:
-            """)
+            asm.appendToBody(s"""ELSE_${id}:\n\n""")
 
             if(children.size > 2){
                 children(2).evaluate(symbol_table)
             }
 
             //Fim
-            asm.appendToBody(s"""
-            EXIT_IF_${id}: \n
-            """)
-            
-            //var boolValue = value != 0
-            // if(boolValue) {
-            //     block_if.evaluate(symbol_table)
-            // }else if(children.size > 2){
-            //     if(!(boolValue)){
-            //         children(2).evaluate(symbol_table)
-            //     }
-            // }
+            asm.appendToBody(s"""EXIT_IF_${id}: \n\n""")
 
             (Unit , Unit)
         }
@@ -412,40 +350,20 @@ package functions {
             
             // Inicialização
             init_state.evaluate(symbol_table) 
-            asm.appendToBody(s"""
-            LOOP_${id}:
-            """)
+            asm.appendToBody(s"""LOOP_${id}:\n""")
             
             // Condição
             condition.evaluate(symbol_table)
-            asm.appendToBody(s"""
-                CMP EAX , False 
-                JE EXIT_LOOP_${id}
-            """)
+            asm.appendToBody(s"""CMP EAX , False\n""")
+            asm.appendToBody(s"""JE EXIT_LOOP_${id}\n""")
 
             //Bloco de Instruções
             block.evaluate(symbol_table)
 
             //Incremento
             increment.evaluate(symbol_table)
-            asm.appendToBody(s"""
-                JMP LOOP_${id}
-            EXIT_LOOP_${id}:\n
-            """)
-
-            // Teste para o for, talvez de errado e tenha que usar breakble
-            // var (value, _type) = condition.evaluate(symbol_table)
-            // var boolValue = value != 0
-
-            // while (boolValue) {
-            //     block.evaluate(symbol_table)
-            //     increment.evaluate(symbol_table)
-
-            //     var result = condition.evaluate(symbol_table)
-            //     value = result._1
-
-            //     boolValue = value != 0
-            // }
+            asm.appendToBody(s"""JMP LOOP_${id}\n\n""")
+            asm.appendToBody(s"""EXIT_LOOP_${id}:\n\n""")
 
             (Unit , Unit)
         }
@@ -459,16 +377,13 @@ package functions {
                 throw new InvalidType(f" [SCANLN - EVALUATE] Only the integer type is accepted in the Scanln function. Tried type: ${number.getClass.getSimpleName}")
             }
             
-            var instruction = s"""
-                ; Scanln
-                PUSH scanint
-                PUSH formatin
-                CALL scanf
-                ADD ESP , 8 
-                MOV EAX , DWORD [scanint]
-                MOV [EBP - 4] , EAX \n
-            """
-            asm.appendToBody(instruction)
+            asm.appendToBody(s"""; Scanln\n""")
+            asm.appendToBody(s"""PUSH scanint\n""")
+            asm.appendToBody(s"""PUSH formatin\n""")
+            asm.appendToBody(s"""CALL scanf\n""")
+            asm.appendToBody(s"""ADD ESP , 8""")
+            asm.appendToBody(s"""MOV EAX , DWORD [scanint]\n""")
+            asm.appendToBody(s"""MOV [EBP - 4] , EAX \n\n""")
 
             (number.toInt , Types.TYPE_INT)
         }
@@ -483,11 +398,8 @@ package identifier {
             var (value , _type) = symbol_table.getter(_value.toString)
             var position = symbol_table.get_position(_value.toString)
             
-            var instruction = s"""
-                ; Identifier(value = ${_value})
-                MOV EAX , [EBP - ${position}]\n
-            """
-            asm.appendToBody(instruction)
+            asm.appendToBody(s"""; Identifier(value = ${_value})\n""")
+            asm.appendToBody(s"""MOV EAX , [EBP - ${position}]\n\n""")
 
             if(_type == Types.TYPE_STR){
                 (value.asInstanceOf[String], _type.asInstanceOf[String])
@@ -506,11 +418,8 @@ package vardec {
             var type1 = _value
             symbol_table.create(children(0)._value.asInstanceOf[String] , type1.asInstanceOf[String])
             
-            var instruction = s"""
-                ; Vardec(identifier = ${_value})
-                PUSH DWORD 0 \n
-            """
-            asm.appendToBody(instruction)
+            asm.appendToBody(s"""; Vardec(identifier = ${children(0)._value.asInstanceOf[String]})\n""")
+            asm.appendToBody(s"""PUSH DWORD 0 \n\n""")
 
             if(children.size == 2){
                 var (boolExpression , type2) = children(1).evaluate(symbol_table)

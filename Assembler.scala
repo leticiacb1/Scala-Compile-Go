@@ -48,28 +48,42 @@ class Assembler() {
             RET
 
         main:
-            PUSH EBP ; guarda o base pointer
-            MOV EBP, ESP ; estabelece um novo base pointer
-    """
+                PUSH EBP ; guarda o base pointer
+                MOV EBP, ESP ; estabelece um novo base pointer
+        
+"""
 
     private val footer =  """
-            PUSH DWORD [stdout]
-            CALL fflush
-            ADD ESP, 4
-            MOV ESP, EBP
-            POP EBP
-            MOV EAX, 1
-            XOR EBX, EBX
-            INT 0x80
+                PUSH DWORD [stdout]
+                CALL fflush
+                ADD ESP, 4
+                MOV ESP, EBP
+                POP EBP
+                MOV EAX, 1
+                XOR EBX, EBX
+                INT 0x80\n
     """
 
     def appendToBody(newContent: String): Unit = {
-        Assembler.appendInstruction(newContent)
+        var fomatedContent = formatInstruction(newContent)
+        Assembler.appendInstruction(fomatedContent)
+    }
+
+    private def formatInstruction (content : String) : String = {
+        val withoutTabs = content.replaceAll("\t", "")
+
+        if (content.contains(":")) {
+            "\t\t\t" + withoutTabs
+        } else {
+            "\t\t\t\t" + withoutTabs
+        }
+        
     }
 
     private def writeFile(fileName : String , content : String) : Unit = {
         val file = new File(fileName)
         val bw = new BufferedWriter(new FileWriter(file))
+
         bw.write(content)
         bw.close()
     }
