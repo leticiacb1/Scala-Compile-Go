@@ -506,6 +506,12 @@ package vardec {
             var type1 = _value
             symbol_table.create(children(0)._value.asInstanceOf[String] , type1.asInstanceOf[String])
             
+            var instruction = s"""
+                ; Vardec(identifier = ${_value})
+                PUSH DWORD 0 \n
+            """
+            asm.body += instruction
+
             if(children.size == 2){
                 var (boolExpression , type2) = children(1).evaluate(symbol_table)
                 
