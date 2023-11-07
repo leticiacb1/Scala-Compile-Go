@@ -3,16 +3,16 @@ import table.SymbolTable
 import constants._
 import errors._
 import assembler.Assembler
-import counter.IdCounter
+import id.Counter
 
 package node {
     abstract class Node (val _value : Any){
         
         var children : List[Node] = Nil
         
-        var idCounter = new IdCounter()
-        var id  = idCounter.counter
-        idCounter.counter += 1
+        var idCounter = new Counter()
+        var id  = idCounter.getCounter
+        idCounter.incrementCounter()
 
         var asm = new Assembler()
 
@@ -311,7 +311,8 @@ package assigment {
             var (old_identifier_value , type1) = symbol_table.getter(children(0)._value.asInstanceOf[String])
             var position = symbol_table.get_position(children(0)._value.asInstanceOf[String])
             var (result_expression, type2) = children(1).evaluate(symbol_table)
-            
+            print("\n===== EVALUATE ASSIGMENT =====\n")
+            print(s"Id : ${id}")
             if(type1 != type2) {
                 throw new IncompatibleTypes(s" [ASSIGMENT - EVALUATE] Setting a value type [$type2] inconsistent with the variable type [$type1]")
             }
@@ -339,7 +340,7 @@ package functions {
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
             var (expression_result , _type) = children(0).evaluate(symbol_table)
             println(expression_result)
-            
+            print("\n===== EVALUATE PRINT =====\n")
             var instruction = s"""
                 ; Println
                 PUSH EAX 
@@ -362,7 +363,8 @@ package functions {
             var block_if    = children(1) 
             
             var (value , _type) = conditional.evaluate(symbol_table)
-           
+            print("\n===== EVALUATE IF =====\n")
+            print(s"Id : ${id}")
             instruction = s"""
             IF_${id}: 
                 CMP EAX , False 
@@ -410,7 +412,7 @@ package functions {
             var condition   = children(1)
             var increment   = children(2)
             var block       = children(3)
-            
+            print("\n===== EVALUATE FOR =====\n")
             // Inicialização
             init_state.evaluate(symbol_table) 
             asm.body += s"""
@@ -506,7 +508,7 @@ package vardec {
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
             var type1 = _value
             symbol_table.create(children(0)._value.asInstanceOf[String] , type1.asInstanceOf[String])
-            
+            print("\n===== EVALUATE VARDEC =====\n")
             var instruction = s"""
                 ; Vardec(identifier = ${_value})
                 PUSH DWORD 0 \n
