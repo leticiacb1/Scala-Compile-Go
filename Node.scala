@@ -10,10 +10,11 @@ package node {
         
         var children : List[Node] = Nil
         
-        var id  = IdCounter().counter
-        IdCounter().counter += 1
+        var idCounter = new IdCounter()
+        var id  = idCounter.counter
+        idCounter.counter += 1
 
-        var asm = Assembler()
+        var asm = new Assembler()
 
         def add_child(child : Node) : Unit = {
             children = children :+ child

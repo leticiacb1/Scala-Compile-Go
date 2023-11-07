@@ -32,6 +32,7 @@ object Main {
     var symbol_table = new SymbolTable()
     tree.evaluate(symbol_table)
 
-    Assembler().mount(fileName)
+    var asm = new Assembler()
+    asm.mount(fileName)
   }
 }
