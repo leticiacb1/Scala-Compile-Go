@@ -1,9 +1,6 @@
 package id
 
 class Counter {
-  // A classe não possui mais a variável counter
-
-  // Métodos específicos para instâncias da classe
   def incrementCounter(): Int = {
     Counter.incrementCounter()
   }

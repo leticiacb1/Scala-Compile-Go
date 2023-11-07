@@ -4,7 +4,7 @@ import java.io._
 
 class Assembler() {
 
-    val header = """
+    private val header = """
         ; constantes
         SYS_EXIT equ 1
         SYS_READ equ 3
@@ -52,9 +52,7 @@ class Assembler() {
             MOV EBP, ESP ; estabelece um novo base pointer
     """
 
-    var body = ""
-
-    var footer =  """
+    private val footer =  """
             PUSH DWORD [stdout]
             CALL fflush
             ADD ESP, 4
@@ -65,6 +63,10 @@ class Assembler() {
             INT 0x80
     """
 
+    def appendToBody(newContent: String): Unit = {
+        Assembler.appendInstruction(newContent)
+    }
+
     private def writeFile(fileName : String , content : String) : Unit = {
         val file = new File(fileName)
         val bw = new BufferedWriter(new FileWriter(file))
@@ -73,15 +75,28 @@ class Assembler() {
     }
 
     def mount(fileName : String) : Unit ={
-        var _fileName = fileName.split(".").head
-        var content = header + body + footer
+        var parts = fileName.split("\\.")
+        var newFileName = parts(0) + ".asm"
+        
+        var content = header + Assembler.body + footer
         
         try{
-            writeFile(fileName, content)
+            writeFile(newFileName, content)
         } catch {
             case e : Exception => 
                  println("\n [WRITE ASM FILE] Fail to write file | " + e.getMessage)
         }
     }
 
+}
+
+
+object Assembler {
+  private var body = ""
+
+  private def appendInstruction(newContent: String): Unit = {
+    body += newContent
+  }
+
+  def getBody: String = body
 }

@@ -35,13 +35,13 @@ package binop {
         def evaluate(symbol_table: SymbolTable) : (Any , String) =  { 
             
             var (value1 , type1) = children(0).evaluate(symbol_table)
-            asm.body +=  """
+            asm.appendToBody("""
                         PUSH EAX
-                         """
+                         """)
             var (value2 , type2) = children(1).evaluate(symbol_table)
-            asm.body +=  """
+            asm.appendToBody("""
                         POP EBX
-                         """
+                         """)
 
             _value match {
 
@@ -54,7 +54,7 @@ package binop {
                         ; Binop(${value1} + ${value2})
                         ADD EAX , EBX\n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
 
                     ((value1.asInstanceOf[Int] + value2.asInstanceOf[Int]) , Types.TYPE_INT)  
                 }
@@ -68,7 +68,7 @@ package binop {
                         ; Binop(${value1} - ${value2})
                         SUB EAX , EBX\n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
 
                     ((value1.asInstanceOf[Int] - value2.asInstanceOf[Int]) , Types.TYPE_INT)
                 } 
@@ -82,7 +82,7 @@ package binop {
                         ; Binop(${value1} / ${value2})
                         IDIV EBX\n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
 
                     (value1.asInstanceOf[Int]/value2.asInstanceOf[Int] , Types.TYPE_INT)
                 }
@@ -96,7 +96,7 @@ package binop {
                         ; Binop(${value1} * ${value2})
                         IMUL EAX , EBX\n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
 
                     (value1.asInstanceOf[Int]*value2.asInstanceOf[Int] , Types.TYPE_INT)
                 }
@@ -113,7 +113,7 @@ package binop {
                         ; Binop(${value1} || ${value2})
                         OR EAX , EBX\n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
 
                     (if (boolValue1 || boolValue2) 1 else 0 ,   Types.TYPE_INT)
                 }
@@ -130,7 +130,7 @@ package binop {
                         ; Binop(${value1} && ${value2})
                         AND EAX , EBX\n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
 
                     (if (boolValue1 && boolValue2) 1 else 0 ,   Types.TYPE_INT)
                 }
@@ -145,7 +145,7 @@ package binop {
                         CMP EAX, EBX  
                         CALL binop_jg  \n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
                     
                     if(type1 == Types.TYPE_INT){
                         (if (value1.asInstanceOf[Int] > value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)        
@@ -165,7 +165,7 @@ package binop {
                         CMP EAX, EBX  
                         CALL binop_jl  \n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
                     
                     if(type1 == Types.TYPE_INT){
                         (if (value1.asInstanceOf[Int] < value2.asInstanceOf[Int]) 1 else 0 ,   Types.TYPE_INT)
@@ -184,7 +184,7 @@ package binop {
                         CMP EAX, EBX  
                         CALL binop_je  \n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
 
                     (if (value1 == value2) 1 else 0 ,   Types.TYPE_INT)
                 }
@@ -208,7 +208,7 @@ package intval {
                         ; Intval(value = ${_value})
                         MOV EAX , {_value} \n
                 """
-            asm.body += instruction
+            asm.appendToBody(instruction)
         
             ( _value.asInstanceOf[Int] , Types.TYPE_INT )
         }
@@ -238,7 +238,7 @@ package unop {
                         ; UnOp(value = ${_value})
                         MOV EAX , ${_value} \n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
 
                     ((1)*value.asInstanceOf[Int] , _type.asInstanceOf[String])
                 }
@@ -248,7 +248,7 @@ package unop {
                         ; UnOp(value = ${_value})
                         NEG EAX  \n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
 
                     ((-1)*value.asInstanceOf[Int] , _type.asInstanceOf[String])
                 }
@@ -261,7 +261,7 @@ package unop {
                         ; UnOp(value = ${_value})
                         MOV EAX  , ${if (boolValue) 0 else 1} \n
                     """
-                    asm.body += instruction
+                    asm.appendToBody(instruction)
 
                     (if (boolValue) 0 else 1 ,   Types.TYPE_INT)
                 }
@@ -311,8 +311,7 @@ package assigment {
             var (old_identifier_value , type1) = symbol_table.getter(children(0)._value.asInstanceOf[String])
             var position = symbol_table.get_position(children(0)._value.asInstanceOf[String])
             var (result_expression, type2) = children(1).evaluate(symbol_table)
-            print("\n===== EVALUATE ASSIGMENT =====\n")
-            print(s"Id : ${id}")
+            
             if(type1 != type2) {
                 throw new IncompatibleTypes(s" [ASSIGMENT - EVALUATE] Setting a value type [$type2] inconsistent with the variable type [$type1]")
             }
@@ -322,7 +321,7 @@ package assigment {
                         ; Assigment(identifier = ${_value} , value = ${result_expression})
                         MOV[EBP - ${position}], EAX \n
                     """
-                asm.body += instruction
+                asm.appendToBody(instruction)
 
                 symbol_table.setter(children(0)._value.asInstanceOf[String] , result_expression.asInstanceOf[Int])
             }else{
@@ -339,8 +338,7 @@ package functions {
     class Println(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
             var (expression_result , _type) = children(0).evaluate(symbol_table)
-            println(expression_result)
-            print("\n===== EVALUATE PRINT =====\n")
+            
             var instruction = s"""
                 ; Println
                 PUSH EAX 
@@ -348,8 +346,8 @@ package functions {
                 CALL printf 
                 ADD ESP , 8\n
             """
-            asm.body += instruction
-            
+            asm.appendToBody(instruction)
+            println(expression_result)
             (Unit , Unit)
         }
     }
@@ -363,34 +361,33 @@ package functions {
             var block_if    = children(1) 
             
             var (value , _type) = conditional.evaluate(symbol_table)
-            print("\n===== EVALUATE IF =====\n")
-            print(s"Id : ${id}")
+            
             instruction = s"""
             IF_${id}: 
                 CMP EAX , False 
                 JMP ELSE_${id}
             """
-            asm.body += instruction
+            asm.appendToBody(instruction)
             
             //Bloco If
             block_if.evaluate(symbol_table)
-            asm.body += s"""
+            asm.appendToBody(s"""
                 JMP EXIT_IF_${id}
-            """
+            """)
 
             // Bloco Else
-            asm.body += s"""
+            asm.appendToBody(s"""
             ELSE_${id}:
-            """
+            """)
 
             if(children.size > 2){
                 children(2).evaluate(symbol_table)
             }
 
             //Fim
-            asm.body += s"""
+            asm.appendToBody(s"""
             EXIT_IF_${id}: \n
-            """
+            """)
             
             //var boolValue = value != 0
             // if(boolValue) {
@@ -412,29 +409,29 @@ package functions {
             var condition   = children(1)
             var increment   = children(2)
             var block       = children(3)
-            print("\n===== EVALUATE FOR =====\n")
+            
             // Inicialização
             init_state.evaluate(symbol_table) 
-            asm.body += s"""
+            asm.appendToBody(s"""
             LOOP_${id}:
-            """
+            """)
             
             // Condição
             condition.evaluate(symbol_table)
-            asm.body += s"""
+            asm.appendToBody(s"""
                 CMP EAX , False 
                 JE EXIT_LOOP_${id}
-            """
+            """)
 
             //Bloco de Instruções
             block.evaluate(symbol_table)
 
             //Incremento
             increment.evaluate(symbol_table)
-            asm.body += s"""
+            asm.appendToBody(s"""
                 JMP LOOP_${id}
             EXIT_LOOP_${id}:\n
-            """
+            """)
 
             // Teste para o for, talvez de errado e tenha que usar breakble
             // var (value, _type) = condition.evaluate(symbol_table)
@@ -471,7 +468,7 @@ package functions {
                 MOV EAX , DWORD [scanint]
                 MOV [EBP - 4] , EAX \n
             """
-            asm.body += instruction
+            asm.appendToBody(instruction)
 
             (number.toInt , Types.TYPE_INT)
         }
@@ -485,12 +482,12 @@ package identifier {
         def evaluate(symbol_table : SymbolTable) : (Any , String) =  { 
             var (value , _type) = symbol_table.getter(_value.toString)
             var position = symbol_table.get_position(_value.toString)
-
+            
             var instruction = s"""
                 ; Identifier(value = ${_value})
                 MOV EAX , [EBP - ${position}]\n
             """
-            asm.body += instruction
+            asm.appendToBody(instruction)
 
             if(_type == Types.TYPE_STR){
                 (value.asInstanceOf[String], _type.asInstanceOf[String])
@@ -508,12 +505,12 @@ package vardec {
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
             var type1 = _value
             symbol_table.create(children(0)._value.asInstanceOf[String] , type1.asInstanceOf[String])
-            print("\n===== EVALUATE VARDEC =====\n")
+            
             var instruction = s"""
                 ; Vardec(identifier = ${_value})
                 PUSH DWORD 0 \n
             """
-            asm.body += instruction
+            asm.appendToBody(instruction)
 
             if(children.size == 2){
                 var (boolExpression , type2) = children(1).evaluate(symbol_table)

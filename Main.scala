@@ -30,7 +30,6 @@ object Main {
     var tree = parser.run(code)
 
     var symbol_table = new SymbolTable()
-    println("\n--- COMEÇA EVALUATE ---\n")
     tree.evaluate(symbol_table)
 
     var asm = new Assembler()
