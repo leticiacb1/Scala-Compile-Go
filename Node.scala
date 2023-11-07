@@ -303,6 +303,7 @@ package assigment {
     class Assigment(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : (Unit, Unit) =  { 
             var (old_identifier_value , type1) = symbol_table.getter(children(0)._value.asInstanceOf[String])
+            var position = symbol_table.get_position(children(0)._value.asInstanceOf[String])
             var (result_expression, type2) = children(1).evaluate(symbol_table)
             
             if(type1 != type2) {
@@ -310,6 +311,12 @@ package assigment {
             }
 
             if(type1 == Types.TYPE_INT){
+                var instruction = s"""
+                        ; Assigment(identifier = ${_value} , value = ${result_expression})
+                        MOV[EBP - ${position}], EAX \n
+                    """
+                asm.body += instruction
+
                 symbol_table.setter(children(0)._value.asInstanceOf[String] , result_expression.asInstanceOf[Int])
             }else{
                 symbol_table.setter(children(0)._value.asInstanceOf[String] , result_expression.asInstanceOf[String])
