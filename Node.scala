@@ -333,6 +333,16 @@ package functions {
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
             var (expression_result , _type) = children(0).evaluate(symbol_table)
             println(expression_result)
+            
+            var instruction = s"""
+                ; Println
+                PUSH EAX 
+                PUSH formatout 
+                CALL printf 
+                ADD ESP , 8\n
+            """
+            asm.body += instruction
+            
             (Unit , Unit)
         }
     }
