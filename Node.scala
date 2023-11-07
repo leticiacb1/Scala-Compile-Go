@@ -404,24 +404,48 @@ package functions {
 
     class For(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
-            children(0).evaluate(symbol_table)
+            
+            var init_state  = children(0)
             var condition   = children(1)
             var increment   = children(2)
             var block       = children(3)
+            
+            // Inicialização
+            init_state.evaluate(symbol_table) 
+            asm.body += s"""
+            LOOP_${id}:
+            """
+            
+            // Condição
+            condition.evaluate(symbol_table)
+            asm.body += s"""
+                CMP EAX , False 
+                JE EXIT_LOOP_${id}
+            """
+
+            //Bloco de Instruções
+            block.evaluate(symbol_table)
+
+            //Incremento
+            increment.evaluate(symbol_table)
+            asm.body += s"""
+                JMP LOOP_${id}
+            EXIT_LOOP_${id}:\n
+            """
 
             // Teste para o for, talvez de errado e tenha que usar breakble
-            var (value, _type) = condition.evaluate(symbol_table)
-            var boolValue = value != 0
+            // var (value, _type) = condition.evaluate(symbol_table)
+            // var boolValue = value != 0
 
-            while (boolValue) {
-                block.evaluate(symbol_table)
-                increment.evaluate(symbol_table)
+            // while (boolValue) {
+            //     block.evaluate(symbol_table)
+            //     increment.evaluate(symbol_table)
 
-                var result = condition.evaluate(symbol_table)
-                value = result._1
+            //     var result = condition.evaluate(symbol_table)
+            //     value = result._1
 
-                boolValue = value != 0
-            }
+            //     boolValue = value != 0
+            // }
 
             (Unit , Unit)
         }
