@@ -481,6 +481,13 @@ package identifier {
     class Identifier(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : (Any , String) =  { 
             var (value , _type) = symbol_table.getter(_value.toString)
+            var position = symbol_table.get_position(_value.toString)
+
+            var instruction = s"""
+                ; Identifier(value = ${_value})
+                MOV EAX , [EBP - ${position}]\n
+            """
+            asm.body += instruction
 
             if(_type == Types.TYPE_STR){
                 (value.asInstanceOf[String], _type.asInstanceOf[String])
