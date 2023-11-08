@@ -26,6 +26,14 @@ object Main {
     var source_code = load_file(fileName)
     var code = PrePro.prePro(source_code)
     
+    if(fileName == "teste1.go"){
+      println(" ---- CODIGO teste1 ---- ")
+      println(source_code)
+
+      println("\n ---- CODIGO teste1 processado---- \n")
+      println(code)
+    }
+
     var parser = new Parser()
     var tree = parser.run(code)
 
