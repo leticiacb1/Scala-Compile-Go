@@ -10,7 +10,7 @@ class Tokenizer ( _source : String){
   var source : String = _source
   var position : Int = 0
   var next : Token = new Token("", 0)
-  var reserved_words : List[String] = List("Println" , "Scanln" , "for" , "if" , "else" , "var" , "int" , "string")
+  var reserved_words : List[String] = List("Println" , "Scanln" , "for" , "if" , "else" , "var" , "int" , "string", "return", "func")
 
   def selectNext() : Unit = {
 
@@ -169,6 +169,12 @@ class Tokenizer ( _source : String){
 
                     case Types.SEMICOLON => {
                         next = new Token(_type = Types.SEMICOLON.toString , _value = Values.SEMICOLON)
+                        position +=1
+                        break;
+                    }
+
+                    case Types.COMMA => {
+                        next = new Token(_type = Types.COMMA.toString , _value = Values.COMMA)
                         position +=1
                         break;
                     }
