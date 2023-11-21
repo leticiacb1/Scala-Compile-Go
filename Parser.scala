@@ -349,12 +349,14 @@ class Parser() {
   }
 
   def parserStatement(tokenizer : Tokenizer) : Node = {
+    var node : Node = null
+    
     if(tokenizer.next._type == Types.END_OF_LINE.toString) {
       tokenizer.selectNext()
-      new NoOp("END_OF_LINE")
+      node = new NoOp("END_OF_LINE")
 
     }else if(tokenizer.next._type == Types.IDENTIFIER){
-      parserAssigment(tokenizer)
+      node = parserAssigment(tokenizer)
 
     } else if(tokenizer.next._type == Types.PRINTLN) {
       tokenizer.selectNext()
@@ -372,7 +374,7 @@ class Parser() {
         }
 
         tokenizer.selectNext()
-        node_println
+        node = node_println
 
       }else{
         throw new InvalidExpression("\n [STATEMENT] Expected open parentheses token | Got " + tokenizer.next)
@@ -395,7 +397,7 @@ class Parser() {
         node_if.add_child(block_else)
 
       }
-      node_if
+      node = node_if
 
     } else if(tokenizer.next._type == Types.FOR){
       tokenizer.selectNext()
@@ -419,7 +421,7 @@ class Parser() {
           node_for.add_child(increment)
           node_for.add_child(block)          
 
-          node_for
+          node = node_for
 
         }else{
           throw new InvalidExpression("\n [STATEMENT] Expected semicolon type | Got " + tokenizer.next)
@@ -445,7 +447,7 @@ class Parser() {
             var_dec.add_child(bool_expression)
           }
 
-          var_dec
+          node = var_dec
         }else{
           throw new InvalidExpression("\n [STATEMENT] Expected 'type' type | Got " + tokenizer.next)
         }
@@ -454,10 +456,28 @@ class Parser() {
         throw new InvalidExpression("\n [STATEMENT] Expected identifier type | Got " + tokenizer.next)
       }
 
+    }else if(tokenizer.next._type == Types.RETURN){
+      tokenizer.selectNext()
+
+      var bool_expression = parserBoolExpression(tokenizer)
+      var node_return = new Return("RETURN")
+      node_return.add_child(bool_expression)
+
+      node = node_return
     }else{
       throw new InvalidExpression("\n [STATEMENT] Token type recived : " + tokenizer.next)
     }
 
+    // Consumir \n após qualquer uma dessas estruturas
+    if(tokenizer.next._type != Types.EOF){
+      if(tokenizer.next._type == Types.END_OF_LINE.toString){
+        tokenizer.selectNext()
+      }else{
+        throw new InvalidExpression("\n [STATEMENT] Expected END OF LINE after a statement , got: " + tokenizer.next)
+      }
+    }
+
+    node
   }  
 
   def parserBlock(tokenizer : Tokenizer) : Node = {
