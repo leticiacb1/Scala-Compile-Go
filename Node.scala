@@ -1,4 +1,5 @@
 import constants._
+import scala.util.control.Breaks._
 import table.SymbolTable
 import table.FunctionTable
 import constants._
@@ -188,11 +189,22 @@ package noop {
 package block {
     import node._
     class Block(_value : Any) extends Node (_value){
-        def evaluate(symbol_table : SymbolTable) : (Unit, Unit) =  { 
+        def evaluate(symbol_table : SymbolTable) : (Any, Any) =  { 
+            var result : (Any, Any) = (Unit, Unit)
+
             for (child <- children) {
-                child.evaluate(symbol_table)
+                if(child._value != "END_OF_LINE") {
+                    result = child.evaluate(symbol_table)
+                } else {
+                    child.evaluate(symbol_table)
+                }
+
+                if(child._value == "RETURN"){
+                    break
+                }
             }
-            (Unit , Unit)
+            
+            result
         }
     }
 }
@@ -428,7 +440,5 @@ package func {
 
             (received_return_value , received_return_type)
         }
-
-
     }
 }
