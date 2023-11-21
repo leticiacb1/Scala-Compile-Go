@@ -16,6 +16,7 @@ import assigment._
 import functions._
 import identifier._
 import program._
+import func._
 
 class Parser() {
 
@@ -37,7 +38,7 @@ class Parser() {
       }else if(tokenizer.next._type == Types.OPEN_PARENTHESES.toString){
         tokenizer.selectNext()
 
-        var funcCall_node = new FuncCall(node_identifier.value)
+        var funcCall_node = new FuncCall(node_identifier._value)
 
         while(tokenizer.next._type != Types.CLOSE_PARENTHESES.toString){
 
@@ -82,8 +83,10 @@ class Parser() {
         var node = new Identifier(tokenizer.next._value)
         tokenizer.selectNext()
 
-        if(tokenizer.next._type == Types.OPEN_PARENTHESES.toString) { 
-          var funcCall_node = new FuncCall(node.value)
+        if(tokenizer.next._type != Types.OPEN_PARENTHESES.toString){
+          node
+        }else{ 
+          var funcCall_node = new FuncCall(node._value)
           tokenizer.selectNext()
 
           while(tokenizer.next._type != Types.CLOSE_PARENTHESES.toString){
@@ -104,10 +107,8 @@ class Parser() {
             throw new InvalidExpression("\n [FACTOR] Expected close parentheses token type | Got " + tokenizer.next)
           }
           
-          node = funcCall_node
+          funcCall_node
         }
-
-        node
       }
 
       else if (tokenizer.next._type ==  Types.PLUS.toString) {

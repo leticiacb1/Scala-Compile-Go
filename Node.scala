@@ -409,7 +409,7 @@ package func {
             
             //  Mesma quantidade de argumentos passados e requeridos pela função:
             if(received_args.length != expected_args.length){
-                throw new InvalidExpression("\n [FUNCALL- EVALUATE] Incorrect number of arguments: expected " + expected_args.length + " got " received_args.length )
+                throw new InvalidExpression("\n [FUNCALL- EVALUATE] Incorrect number of arguments: expected " + expected_args.length + " got " + received_args.length )
             }
 
             // Varrendo argumentos passados e argumentos esperados
