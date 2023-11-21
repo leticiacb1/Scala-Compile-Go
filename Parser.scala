@@ -37,7 +37,7 @@ class Parser() {
       }else if(tokenizer.next._type == Types.OPEN_PARENTHESES.toString){
         tokenizer.selectNext()
 
-        var funcCall_node = new FunctionCall(node_identifier.value)
+        var funcCall_node = new FuncCall(node_identifier.value)
 
         while(tokenizer.next._type != Types.CLOSE_PARENTHESES.toString){
 
@@ -80,8 +80,33 @@ class Parser() {
 
       else if (tokenizer.next._type ==  Types.IDENTIFIER){
         var node = new Identifier(tokenizer.next._value)
-
         tokenizer.selectNext()
+
+        if(tokenizer.next._type == Types.OPEN_PARENTHESES.toString) { 
+          var funcCall_node = new FuncCall(node.value)
+          tokenizer.selectNext()
+
+          while(tokenizer.next._type != Types.CLOSE_PARENTHESES.toString){
+            
+            var bool_expression = parserBoolExpression(tokenizer)
+            funcCall_node.add_child(bool_expression)
+
+            if(tokenizer.next._type == Types.COMMA.toString){
+              tokenizer.selectNext()
+            }else{
+              break
+            }
+          }
+
+          if(tokenizer.next._type == Types.CLOSE_PARENTHESES.toString){
+            tokenizer.selectNext()
+          }else{
+            throw new InvalidExpression("\n [FACTOR] Expected close parentheses token type | Got " + tokenizer.next)
+          }
+          
+          node = funcCall_node
+        }
+
         node
       }
 
