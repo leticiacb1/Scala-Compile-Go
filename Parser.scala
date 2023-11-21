@@ -489,6 +489,91 @@ class Parser() {
     node_block
   }
 
+  def declaration(tokenizer : Tokenizer) : Node ={
+    var nodeFuncdec = new FuncDec("FUNCDEC")
+    var argsList : List[Node] = Nil
+
+    if(tokenizer.next._type != Types.FUNC){
+      throw new InvalidExpression("\n [DECLARE] Expected FUNCDEC type | Got " + tokenizer.next)
+    }
+
+    tokenizer.selectNext()
+
+    if (tokenizer.next._type != Types.IDENTIFIER) {
+      throw new InvalidExpression("\n [DECLARE] Expected IDENTIFIER type | Got " + tokenizer.next)
+    }
+
+    var functionName = new Identifier(tokenizer.next._value)
+    tokenizer.selectNext()
+
+    if(tokenizer.next._type != Types.OPEN_PARENTHESES.toString){
+      throw new InvalidExpression("\n [DECLARE] Expected OPEN PARENTHESES type | Got " + tokenizer.next)
+    }
+
+    tokenizer.selectNext()
+
+    while (tokenizer.next._type != Types.CLOSE_PARENTHESES.toString) {
+      // Add arguments
+      if(tokenizer.next._type == Types.IDENTIFIER){
+        var nodeIdentifier = new Identifier(tokenizer.next._value)
+        tokenizer.selectNext()
+
+        if(tokenizer.next._type != Types.TYPE_INT || tokenizer.next._type != Types.TYPE_STR){
+          throw new InvalidExpression("\n [DECLARE] Invalid type find | Got " + tokenizer.next)
+        }
+
+        var arg = new VarDec(tokenizer.next._type)
+        arg.add_child(nodeIdentifier)
+        argsList = argsList :+ arg
+        
+        tokenizer.selectNext()
+
+        if(tokenizer.next._type == Types.COMMA.toString) {
+          tokenizer.selectNext()
+        }else{
+          break
+        }
+      }
+    }
+
+    if (tokenizer.next._type != Types.CLOSE_PARENTHESES.toString){
+      throw new InvalidExpression("\n [DECLARE] Expected CLOSE PARENTHESES find | Got " + tokenizer.next)
+    }
+    tokenizer.selectNext()
+
+    if(tokenizer.next._type == Types.TYPE_INT || tokenizer.next._type == Types.TYPE_STR){
+      var nodeDefinition = new VarDec(tokenizer.next._type)
+      nodeDefinition.add_child(functionName)
+      
+      tokenizer.selectNext()
+
+      var nodeBlock = parserBlock(tokenizer)
+
+      if(tokenizer.next._type != Types.END_OF_LINE.toString) {
+        throw new InvalidExpression("\n [DECLARE] Expected END OF LINE type find | Got " + tokenizer.next)
+      }
+      tokenizer.selectNext()
+
+      // Add definição da função como filho:
+      nodeFuncdec.add_child(nodeDefinition)
+
+      // Add filhos
+      for (arg <- argsList) {
+          nodeFuncdec.add_child(arg)
+      }
+
+      // Add bloco de execuçao da função
+      nodeFuncdec.add_child(nodeBlock)
+
+    }else{
+      throw new InvalidExpression("\n [DECLARE] Invalid type find | Got " + tokenizer.next)
+    }
+
+    return nodeFuncdec
+  } 
+
+
+
   def program(tokenizer : Tokenizer) : Node ={
     var node_program = new Program("PROGRAM")
 
