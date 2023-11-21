@@ -344,8 +344,9 @@ package vardec {
     }
 }
 
-package funcdec {
+package func {
     import node._
+
     class FuncDec(_value : Any) extends Node (_value){
 
         var function_table = new FunctionTable()
@@ -360,10 +361,7 @@ package funcdec {
             (Unit, Unit)
         }
     }
-}
 
-package funcreturn {
-    import node._
     class Return(_value : Any) extends Node (_value){
 
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
@@ -378,4 +376,58 @@ package funcreturn {
             }
         }
     }
+
+    class FuncCall(_value : Any) extends Node (_value){
+        var function_table = new FunctionTable()
+
+        def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
+
+            var local_table = new SymbolTable()
+
+            // Argumentos passados para a função
+            var function_name = _value.asInstanceOf[String]
+            var received_args = children
+
+            // Consultando a declaracao da função e o tipo dos argumentos esperados
+            var (function_node, return_expected_type) = function_table.getter(function_name) 
+            
+            var declaration = function_node.children.head
+            var expected_args =  function_node.children.slice(1, function_node.children.length - 1)
+            var block = function_node.children.last
+            
+            //  Mesma quantidade de argumentos passados e requeridos pela função:
+            if(received_args.length != expected_args.length){
+                throw new InvalidExpression("\n [FUNCALL- EVALUATE] Incorrect number of arguments: expected " + expected_args.length + " got " received_args.length )
+            }
+
+            // Varrendo argumentos passados e argumentos esperados
+            for (i <- received_args.indices) {
+                received_args(i).evaluate(local_table)
+                var expected_type = expected_args(i)._value
+
+                var identifier = expected_args(i).children(0)
+
+                var (received_value, received_type) = received_args(i).evaluate(symbol_table)
+
+                if(received_type != expected_type){
+                    throw new InvalidExpression("\n [FUNCALL- EVALUATE] Incorrect arg type for " + identifier._value + " in " + function_name +  " function. Expected type " +  expected_type +  " got " + received_type)
+                }
+
+                // Setando o valor recebido do argumento
+                local_table.setter(identifier._value, received_value)
+            }
+
+            // Executando o conteúdo da função
+            var (received_return_value , received_return_type) = block.evaluate(local_table) 
+
+            if((!received_return_value.isInstanceOf[Unit]) && (!received_return_type.isInstanceOf[Unit])){
+                if(received_return_type != return_expected_type){
+                     throw new InvalidExpression("\n [FUNCALL- EVALUATE] Incorrect return type in " + function_name + " function. Expected type" + return_expected_type + " got " + received_return_type)
+                }
+            }
+
+            (received_return_value , received_return_type)
+    }
+
+
 }
