@@ -2,6 +2,7 @@ package table{
 
 import errors.ExistingKey
 import errors.NonExistingKey
+import node._
 
     class SymbolTable (){
         
@@ -39,7 +40,39 @@ import errors.NonExistingKey
         }
     }
 
-    class FunctionTable (){
+    class FunctionTable(){
+        /*  
+               Nome da funcao   |    Nó endereço da função    |   Type
+            -----------------------------------------------------------------------
+                       main               Próprio nó FuncDec          (Int or str)
+        */
+
+        def getter(name: String): (Node, String) = {
+            FunctionTable.get(name)
+        }
         
+        def declare(name: String, node: Node, _type: String): Unit = {
+            FunctionTable.create(name, node, _type)
+        }
+    }
+
+    object FunctionTable {
+        private var table: Map[String, (Node, String)] = Map.empty
+
+        def get(name: String): (Node, String) = {
+            table.get(name) match {
+                case Some((node, _type)) => (node, _type)
+                case None => throw new NonExistingKey(s"Chave não encontrada: $name")
+            }
+        }
+
+        def create(name: String, node: Node, _type: String) : Unit = {
+            if (!table.contains(name)) {
+                table = table + (name -> (node , _type)) 
+            } else {
+                throw new ExistingKey(s" [FUNCTION TABLE - CREATE] The function $name has already been declared.")
+            }
+        }
+
     }
 }
