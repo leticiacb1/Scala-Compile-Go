@@ -354,9 +354,9 @@ package func {
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
             
             var node_declaration = children(0)
-            var function_name = node_declaration.children(0)._value
+            var function_name = node_declaration.children(0)._value.asInstanceOf[String]
 
-            function_table.declare(function_name, this, node_declaration._value)
+            function_table.declare(function_name, this, node_declaration._value.asInstanceOf[String])
 
             (Unit, Unit)
         }
@@ -414,7 +414,7 @@ package func {
                 }
 
                 // Setando o valor recebido do argumento
-                local_table.setter(identifier._value, received_value)
+                local_table.setter(identifier._value.asInstanceOf[String], received_value)
             }
 
             // Executando o conteúdo da função
