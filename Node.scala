@@ -1,5 +1,6 @@
 import constants._
 import table.SymbolTable
+import table.FunctionTable
 import constants._
 import errors._
 
@@ -339,6 +340,22 @@ package vardec {
             }
             
             (Unit, Unit)
+        }
+    }
+}
+
+package funcdec {
+    import node._
+    class FuncDec(_value : Any) extends Node (_value){
+
+        var function_table = new FunctionTable()
+
+        def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
+            
+            var node_declaration = children(0)
+            var function_name = node_declaration.children(0).old_identifier_value
+
+            function_table.declare(function_name, this, node_declaration._value)
         }
     }
 }
