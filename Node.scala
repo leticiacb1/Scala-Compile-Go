@@ -353,9 +353,29 @@ package funcdec {
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
             
             var node_declaration = children(0)
-            var function_name = node_declaration.children(0).old_identifier_value
+            var function_name = node_declaration.children(0)._value
 
             function_table.declare(function_name, this, node_declaration._value)
+
+            (Unit, Unit)
+        }
+    }
+}
+
+package funcreturn {
+    import node._
+    class Return(_value : Any) extends Node (_value){
+
+        def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
+            
+            var bool_expression = children(0)
+            var (value, _type) = bool_expression.evaluate(symbol_table)
+
+            if(_type == Types.TYPE_STR){
+                (value.asInstanceOf[String], _type.asInstanceOf[String])
+            }else{
+                (value.asInstanceOf[Int], _type.asInstanceOf[String])
+            }
         }
     }
 }
