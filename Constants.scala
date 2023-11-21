@@ -46,6 +46,10 @@ object Types {
     val VARIABLE_STR = "variable_str"
 
     val QUOTATION_MARKS  = '"'
+    val COMMA = ','
+
+    val RETURN = "return"
+    val FUNC   = "func"
 }
 
 object Values {
@@ -87,4 +91,10 @@ object Values {
 
     val QUOTATION_MARKS = 25
     val FUNCTIONS = 26
+
+    val COMMA = 27
+
+    val RETURN = 28
+    val FUNC   = 29
+    
 }
