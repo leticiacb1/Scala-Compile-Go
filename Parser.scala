@@ -33,7 +33,31 @@ class Parser() {
         node_assigment.add_child(node_identifier)
         node_assigment.add_child(bool_expression)
         node_assigment
+      
+      }else if(tokenizer.next._type == Types.OPEN_PARENTHESES.toString){
+        tokenizer.selectNext()
 
+        var funcCall_node = new FunctionCall(node_identifier.value)
+
+        while(tokenizer.next._type != Types.CLOSE_PARENTHESES.toString){
+
+          var bool_expression = parserBoolExpression(tokenizer)
+          funcCall_node.add_child(bool_expression)
+
+          if(tokenizer.next._type == Types.COMMA.toString){
+            tokenizer.selectNext()
+          }else{
+            break
+          }
+        }
+
+        if(tokenizer.next._type == Types.CLOSE_PARENTHESES.toString){
+          tokenizer.selectNext()
+        }else{
+          throw new InvalidExpression("\n [PARSER ASSIGMENT] Expected close parentheses token type | Got " + tokenizer.next)
+        }
+        
+        funcCall_node
       }else{
         throw new InvalidExpression("\n [PARSER ASSIGMENT] Expected assigment token | Got " + tokenizer.next)
       }
