@@ -519,13 +519,13 @@ class Parser() {
     }
 
     // Consumir \n após qualquer uma dessas estruturas
-    if(tokenizer.next._type != Types.EOF){
-      if(tokenizer.next._type == Types.END_OF_LINE.toString){
-        tokenizer.selectNext()
-      }else{
-        throw new InvalidExpression("\n [STATEMENT] Expected END OF LINE after a statement , got: " + tokenizer.next)
-      }
-    }
+    //if(tokenizer.next._type != Types.EOF){
+    //  if(tokenizer.next._type == Types.END_OF_LINE.toString){
+    //    tokenizer.selectNext()
+    //  }else{
+    //    throw new InvalidExpression("\n [STATEMENT] Expected END OF LINE after a statement , got: " + tokenizer.next)
+    //  }
+    // }
 
     node
   }  

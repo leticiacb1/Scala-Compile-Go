@@ -28,6 +28,9 @@ object Main {
     var source_code = load_file(fileName)
     var code = PrePro.prePro(source_code)
     
+    //print("\n===== DEPOIS DO PREPRO ======\n")
+    //print(code)
+
     var parser = new Parser()
     var tree = parser.run(code)
 
