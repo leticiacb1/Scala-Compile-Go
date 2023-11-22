@@ -444,7 +444,7 @@ package func {
 
             if((!received_return_value.isInstanceOf[Unit]) && (!received_return_type.isInstanceOf[Unit])){
                 if(received_return_type != return_expected_type){
-                     throw new InvalidExpression("\n [FUNCALL- EVALUATE] Incorrect return type in " + function_name + " function. Expected type" + return_expected_type + " got " + received_return_type)
+                     throw new InvalidExpression("\n [FUNCALL- EVALUATE] Incorrect return type in " + function_name + " function. Expected type " + return_expected_type + " got " + received_return_type)
                 }
             }
 
