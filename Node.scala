@@ -364,12 +364,13 @@ package func {
         var function_table = new FunctionTable()
 
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
-            
+            printf(" === FUNCDEC ====\n")
             var node_declaration = children(0)
             var function_name = node_declaration.children(0)._value.asInstanceOf[String]
 
             function_table.declare(function_name, this, node_declaration._value.asInstanceOf[String])
-
+            var (function_node, return_expected_type) = function_table.getter(function_name)
+            function_table.show_table()
             (Unit, Unit)
         }
     }
@@ -393,7 +394,9 @@ package func {
         var function_table = new FunctionTable()
 
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
+            printf(" === FUNCCALL ====\n")
 
+            function_table.show_table()
             var local_table = new SymbolTable()
 
             // Argumentos passados para a função

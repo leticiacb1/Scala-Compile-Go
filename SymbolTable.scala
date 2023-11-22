@@ -54,6 +54,12 @@ import node._
         def declare(name: String, node: Node, _type: String): Unit = {
             FunctionTable.create(name, node, _type)
         }
+
+        def show_table(): Unit = {
+            for ((chave, (node, valor)) <- FunctionTable.table) {
+                println(s"$chave: ($node , $valor)")
+            }
+        }
     }
 
     object FunctionTable {

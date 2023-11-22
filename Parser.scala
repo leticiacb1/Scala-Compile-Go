@@ -40,15 +40,21 @@ class Parser() {
 
         var funcCall_node = new FuncCall(node_identifier._value)
 
-        while(tokenizer.next._type != Types.CLOSE_PARENTHESES.toString){
+        breakable{
+          while(true){
 
-          var bool_expression = parserBoolExpression(tokenizer)
-          funcCall_node.add_child(bool_expression)
+            if(tokenizer.next._type == Types.CLOSE_PARENTHESES.toString){
+              break;
+            }
 
-          if(tokenizer.next._type == Types.COMMA.toString){
-            tokenizer.selectNext()
-          }else{
-            break
+            var bool_expression = parserBoolExpression(tokenizer)
+            funcCall_node.add_child(bool_expression)
+
+            if(tokenizer.next._type == Types.COMMA.toString){
+              tokenizer.selectNext()
+            }else{
+              break;
+            }
           }
         }
 
@@ -89,15 +95,21 @@ class Parser() {
           var funcCall_node = new FuncCall(node._value)
           tokenizer.selectNext()
 
-          while(tokenizer.next._type != Types.CLOSE_PARENTHESES.toString){
-            
-            var bool_expression = parserBoolExpression(tokenizer)
-            funcCall_node.add_child(bool_expression)
+          breakable{
+            while(true){
+              
+              if(tokenizer.next._type == Types.CLOSE_PARENTHESES.toString){
+                break;
+              }
 
-            if(tokenizer.next._type == Types.COMMA.toString){
-              tokenizer.selectNext()
-            }else{
-              break
+              var bool_expression = parserBoolExpression(tokenizer)
+              funcCall_node.add_child(bool_expression)
+
+              if(tokenizer.next._type == Types.COMMA.toString){
+                tokenizer.selectNext()
+              }else{
+                break;
+              }
             }
           }
 
@@ -518,14 +530,14 @@ class Parser() {
       throw new InvalidExpression("\n [STATEMENT] Token type recived : " + tokenizer.next)
     }
 
-    // Consumir \n após qualquer uma dessas estruturas
-    //if(tokenizer.next._type != Types.EOF){
-    //  if(tokenizer.next._type == Types.END_OF_LINE.toString){
-    //    tokenizer.selectNext()
-    //  }else{
-    //    throw new InvalidExpression("\n [STATEMENT] Expected END OF LINE after a statement , got: " + tokenizer.next)
-    //  }
-    // }
+    //Consumir \n após qualquer uma dessas estruturas
+    if(tokenizer.next._type != Types.EOF){
+     if(tokenizer.next._type == Types.END_OF_LINE.toString){
+       tokenizer.selectNext()
+     }else{
+       throw new InvalidExpression("\n [STATEMENT] Expected END OF LINE after a statement , got: " + tokenizer.next)
+     }
+    }
 
     node
   }  
@@ -549,7 +561,10 @@ class Parser() {
           }
         }
 
-        tokenizer.selectNext()
+        if(tokenizer.next._type == Types.CLOSE_KEY.toString){
+          tokenizer.selectNext()
+        }
+        
         node_block
       } else {
         throw new InvalidExpression("\n [BLOCK] Expected END OF LINE type | Got " + tokenizer.next)
@@ -559,7 +574,7 @@ class Parser() {
     node_block
   }
 
-  def declaration(tokenizer : Tokenizer) : Node ={
+  def parserDeclaration(tokenizer : Tokenizer) : Node ={
     var nodeFuncdec = new FuncDec("FUNCDEC")
     var argsList : List[Node] = Nil
 
@@ -582,35 +597,43 @@ class Parser() {
 
     tokenizer.selectNext()
 
-    while (tokenizer.next._type != Types.CLOSE_PARENTHESES.toString) {
-      // Add arguments
-      if(tokenizer.next._type == Types.IDENTIFIER){
-        var nodeIdentifier = new Identifier(tokenizer.next._value)
-        tokenizer.selectNext()
-
-        if(tokenizer.next._type != Types.TYPE_INT || tokenizer.next._type != Types.TYPE_STR){
-          throw new InvalidExpression("\n [DECLARE] Invalid type find | Got " + tokenizer.next)
-        }
-
-        var arg = new VarDec(tokenizer.next._type)
-        arg.add_child(nodeIdentifier)
-        argsList = argsList :+ arg
+    // Add arguments
+    breakable {
+      while (true) {
         
-        tokenizer.selectNext()
-
-        if(tokenizer.next._type == Types.COMMA.toString) {
-          tokenizer.selectNext()
-        }else{
-          break
+        if(tokenizer.next._type == Types.CLOSE_PARENTHESES.toString()){
+          break;
         }
+        
+        if(tokenizer.next._type == Types.IDENTIFIER){
+          var nodeIdentifier = new Identifier(tokenizer.next._value)
+          tokenizer.selectNext()
+
+          if(tokenizer.next._type != Types.TYPE_INT && tokenizer.next._type != Types.TYPE_STR){
+            throw new InvalidExpression("\n [DECLARE] Invalid type find | Got " + tokenizer.next._type)
+          }
+
+          var arg = new VarDec(tokenizer.next._type)
+          arg.add_child(nodeIdentifier)
+          argsList = argsList :+ arg
+          
+          tokenizer.selectNext()
+
+          if(tokenizer.next._type == Types.COMMA.toString) {
+            tokenizer.selectNext()
+          }else{
+            break;
+          }
+        }
+
       }
     }
-
+    
     if (tokenizer.next._type != Types.CLOSE_PARENTHESES.toString){
       throw new InvalidExpression("\n [DECLARE] Expected CLOSE PARENTHESES find | Got " + tokenizer.next)
     }
     tokenizer.selectNext()
-
+    
     if(tokenizer.next._type == Types.TYPE_INT || tokenizer.next._type == Types.TYPE_STR){
       var nodeDefinition = new VarDec(tokenizer.next._type)
       nodeDefinition.add_child(functionName)
@@ -652,20 +675,26 @@ class Parser() {
         if(tokenizer.next._type == Types.EOF){
           break;
         }else{
-          var statement = parserStatement(tokenizer)
+          //var statement = parserStatement(tokenizer)
+          var declaration = parserDeclaration(tokenizer)
           
           if(tokenizer.next._type == Types.END_OF_LINE.toString){
             tokenizer.selectNext()
-          }else{
-             throw new InvalidExpression("\n [PROGRAM] Expected END OF LINE type | Got " + tokenizer.next)
-          }
+          }//else{
+          //    throw new InvalidExpression("\n [PROGRAM] Expected END OF LINE type | Got " + tokenizer.next)
+          // }
 
-          node_program.add_child(statement)
+          node_program.add_child(declaration)
         }
       }
     }
 
     tokenizer.selectNext()
+
+    // Add função principal ao programa
+    var main_function = new FuncCall("main")
+    node_program.add_child(main_function)
+
     node_program
 
   }
@@ -677,6 +706,7 @@ class Parser() {
 
     var tree = program(tokenizer)
     
+    print(tokenizer.next._type)
     if(tokenizer.next._type != Types.EOF ){
       throw new InvalidExpression("\n Expected EOF type | Got " + tokenizer.next)
     }

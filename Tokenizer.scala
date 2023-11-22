@@ -207,6 +207,7 @@ class Tokenizer ( _source : String){
                         }
                         
                         if (reserved_words.contains(value_str)){
+                            source.charAt(position)
                             next = new Token(_type = value_str , _value = Values.FUNCTIONS)
 
                         }else{
