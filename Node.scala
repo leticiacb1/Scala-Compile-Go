@@ -196,7 +196,7 @@ package block {
             breakable{
                 while(i < children.length) {
                     val child = children(i)
-                    println(s" Filho : ${child}\n")
+                    
                     if(child._value != "END_OF_LINE") {
                         result = child.evaluate(symbol_table)
                     } else {
@@ -204,7 +204,6 @@ package block {
                     }
 
                     if(child._value == "RETURN"){
-                        println(" > Achei o retorno \n")
                         break
                     }
 
@@ -377,7 +376,7 @@ package func {
             var function_name = node_declaration.children(0)._value.asInstanceOf[String]
 
             function_table.declare(function_name, this, node_declaration._value.asInstanceOf[String])
-            //function_table.show_table()
+            
             (Unit, Unit)
         }
     }
@@ -402,14 +401,11 @@ package func {
 
         def evaluate(symbol_table : SymbolTable) : (Any , Any) =  { 
 
-            //function_table.show_table()
             var local_table = new SymbolTable()
 
             // Argumentos passados para a função
             var function_name = _value.asInstanceOf[String]
             var received_args = children
-            // Consultando a declaracao da função e o tipo dos argumentos esperados
-            function_table.show_table()
 
             var (function_node, return_expected_type) = function_table.getter(function_name) 
 

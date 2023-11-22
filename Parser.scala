@@ -428,8 +428,6 @@ class Parser() {
           tokenizer.selectNext()
 
           var expression = parserBoolExpression(tokenizer)
-
-          println(s" [PRINT]  ${expression}")
           
           var node_println = new Println(Types.PRINTLN)
           node_println.add_child(expression)
@@ -483,7 +481,6 @@ class Parser() {
           
           if(tokenizer.next._type == Types.SEMICOLON.toString){
             tokenizer.selectNext()
-            print(s" NO FOR \n")
             var increment = parserAssigment(tokenizer)
             var block     = parserBlock(tokenizer)
 
@@ -541,7 +538,6 @@ class Parser() {
       }
 
       //Consumir \n após qualquer uma dessas estruturas
-      println(s"\n AQUIIIIIIII , valor : ${tokenizer.next._type}")
       if(tokenizer.next._type != Types.EOF){
         if(tokenizer.next._type == Types.END_OF_LINE.toString){
           tokenizer.selectNext()
@@ -574,10 +570,8 @@ class Parser() {
         }
 
         if(tokenizer.next._type == Types.CLOSE_KEY.toString){
-          println("Consumo fecha chaves do block\n")
           tokenizer.selectNext()
         }
-        println(" retorno o bloco \n")
         node_block
       } else {
         throw new InvalidExpression("\n [BLOCK] Expected END OF LINE type | Got " + tokenizer.next)
@@ -659,7 +653,6 @@ class Parser() {
       if(tokenizer.next._type != Types.END_OF_LINE.toString) {
         throw new InvalidExpression("\n [DECLARE] Expected END OF LINE type find | Got " + tokenizer.next)
       }
-      print("consumi barra n funcao \n ")
       tokenizer.selectNext()
 
       // Add definição da função como filho:
