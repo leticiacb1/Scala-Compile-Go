@@ -4,7 +4,8 @@ func ok(x int) int {
 }
 
 func main() int {
-    var y int = ok(1)
+    var y int
+	y = ok(3)
 
     Println(y)
 }

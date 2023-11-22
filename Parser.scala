@@ -635,6 +635,7 @@ class Parser() {
     tokenizer.selectNext()
     
     if(tokenizer.next._type == Types.TYPE_INT || tokenizer.next._type == Types.TYPE_STR){
+      
       var nodeDefinition = new VarDec(tokenizer.next._type)
       nodeDefinition.add_child(functionName)
       
@@ -706,7 +707,6 @@ class Parser() {
 
     var tree = program(tokenizer)
     
-    print(tokenizer.next._type)
     if(tokenizer.next._type != Types.EOF ){
       throw new InvalidExpression("\n Expected EOF type | Got " + tokenizer.next)
     }

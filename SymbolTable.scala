@@ -38,6 +38,12 @@ import node._
             var _type = table.get(identifier).get._2
             table = table + (identifier -> (value, _type))
         }
+
+        def show_table(): Unit = {
+            for ((chave, (node, valor)) <- table) {
+                println(s"$chave: ($node , $valor)")
+            }
+        }
     }
 
     class FunctionTable(){
@@ -48,7 +54,7 @@ import node._
         */
 
         def getter(name: String): (Node, String) = {
-            FunctionTable.get(name)
+            FunctionTable._get(name)
         }
         
         def declare(name: String, node: Node, _type: String): Unit = {
@@ -65,11 +71,19 @@ import node._
     object FunctionTable {
         private var table: Map[String, (Node, String)] = Map.empty
 
-        def get(name: String): (Node, String) = {
-            table.get(name) match {
-                case Some((node, _type)) => (node, _type)
-                case None => throw new NonExistingKey(s"Chave não encontrada: $name")
+        def _get(name: String): (Node, String) = {
+            var value : Node  = null
+            var _type : String  = ""
+            
+            if(table.get(name).isDefined){
+                var result = table.get(name)
+                value = result.get._1
+                _type = result.get._2
+            }else{
+                throw new NonExistingKey(s"Chave não encontrada: $name")
             }
+            
+            (value,_type)
         }
 
         def create(name: String, node: Node, _type: String) : Unit = {

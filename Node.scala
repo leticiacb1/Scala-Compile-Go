@@ -191,16 +191,24 @@ package block {
     class Block(_value : Any) extends Node (_value){
         def evaluate(symbol_table : SymbolTable) : (Any, Any) =  { 
             var result : (Any, Any) = (Unit, Unit)
+            var i = 0
 
-            for (child <- children) {
-                if(child._value != "END_OF_LINE") {
-                    result = child.evaluate(symbol_table)
-                } else {
-                    child.evaluate(symbol_table)
-                }
+            breakable{
+                while(i < children.length) {
+                    val child = children(i)
+                    println(s" Filho : ${child}\n")
+                    if(child._value != "END_OF_LINE") {
+                        result = child.evaluate(symbol_table)
+                    } else {
+                        child.evaluate(symbol_table)
+                    }
 
-                if(child._value == "RETURN"){
-                    break
+                    if(child._value == "RETURN"){
+                        println(" > Achei o retorno \n")
+                        break
+                    }
+
+                    i +=1
                 }
             }
             
@@ -333,7 +341,7 @@ package identifier {
 package vardec {
     import node._
     class VarDec(_value : Any) extends Node (_value){
-        def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
+        def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  {
             var type1 = _value
             symbol_table.create(children(0)._value.asInstanceOf[String] , type1.asInstanceOf[String])
             
@@ -364,20 +372,19 @@ package func {
         var function_table = new FunctionTable()
 
         def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
-            printf(" === FUNCDEC ====\n")
+            
             var node_declaration = children(0)
             var function_name = node_declaration.children(0)._value.asInstanceOf[String]
 
             function_table.declare(function_name, this, node_declaration._value.asInstanceOf[String])
-            var (function_node, return_expected_type) = function_table.getter(function_name)
-            function_table.show_table()
+            //function_table.show_table()
             (Unit, Unit)
         }
     }
 
     class Return(_value : Any) extends Node (_value){
 
-        def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
+        def evaluate(symbol_table : SymbolTable) : (Any , String) =  { 
             
             var bool_expression = children(0)
             var (value, _type) = bool_expression.evaluate(symbol_table)
@@ -393,19 +400,19 @@ package func {
     class FuncCall(_value : Any) extends Node (_value){
         var function_table = new FunctionTable()
 
-        def evaluate(symbol_table : SymbolTable) : (Unit , Unit) =  { 
-            printf(" === FUNCCALL ====\n")
+        def evaluate(symbol_table : SymbolTable) : (Any , Any) =  { 
 
-            function_table.show_table()
+            //function_table.show_table()
             var local_table = new SymbolTable()
 
             // Argumentos passados para a função
             var function_name = _value.asInstanceOf[String]
             var received_args = children
-
             // Consultando a declaracao da função e o tipo dos argumentos esperados
+            function_table.show_table()
+
             var (function_node, return_expected_type) = function_table.getter(function_name) 
-            
+
             var declaration = function_node.children.head
             var expected_args =  function_node.children.slice(1, function_node.children.length - 1)
             var block = function_node.children.last
@@ -417,13 +424,13 @@ package func {
 
             // Varrendo argumentos passados e argumentos esperados
             for (i <- received_args.indices) {
-                received_args(i).evaluate(local_table)
+                expected_args(i).evaluate(local_table)
+                
                 var expected_type = expected_args(i)._value
-
+                
                 var identifier = expected_args(i).children(0)
-
+                
                 var (received_value, received_type) = received_args(i).evaluate(symbol_table)
-
                 if(received_type != expected_type){
                     throw new InvalidExpression("\n [FUNCALL- EVALUATE] Incorrect arg type for " + identifier._value + " in " + function_name +  " function. Expected type " +  expected_type +  " got " + received_type)
                 }
@@ -433,7 +440,7 @@ package func {
             }
 
             // Executando o conteúdo da função
-            var (received_return_value , received_return_type) = block.evaluate(local_table) 
+            var (received_return_value , received_return_type) = block.evaluate(local_table)
 
             if((!received_return_value.isInstanceOf[Unit]) && (!received_return_type.isInstanceOf[Unit])){
                 if(received_return_type != return_expected_type){
