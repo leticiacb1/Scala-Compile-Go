@@ -1,0 +1,12 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(run, Some(81dd2b1f-a6a5-4ee2-8b7e-ad99bc668720), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / run[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mUpdating [0m
+[0m[[0m[0minfo[0m] [0m[0mResolved  dependencies[0m
+[0m[[0m[0minfo[0m] [0m[0mFetching artifacts of [0m
+[0m[[0m[0minfo[0m] [0m[0mFetched artifacts of [0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /home/leticiacb/Documents/teste_sbt/scala-compile-go/src/main/scala/target/scala-2.12/classes ...[0m
+[0m[[0m[0minfo[0m] [0m[0mNon-compiled module 'compiler-bridge_2.12' for Scala 2.12.18. Compiling...[0m
+[0m[[0m[0minfo[0m] [0m[0m  Compilation completed in 9.984s.[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 16 s, completed Feb 20, 2024 4:37:25 PM[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
